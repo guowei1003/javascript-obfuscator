@@ -5,7 +5,18 @@ export function ConsoleOutputDisableExpressionTemplate (): string {
     return `
         var {consoleLogDisableFunctionName} = {singleNodeCallControllerFunctionName}(this, function () {
             var func = function () {};
-            
+            if (typeof wx === "object"){
+                try{
+                    console.log = func;
+                    console.warn = func;
+                    console.debug = func;
+                    console.info = func;
+                    console.error = func;
+                    console.exception = func;
+                    console.trace = func;
+                    return
+                } catch (e) {}
+            }
             {globalVariableTemplate}
                         
             if (!that.console) {
