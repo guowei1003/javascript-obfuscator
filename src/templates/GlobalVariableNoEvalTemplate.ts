@@ -9,6 +9,6 @@ export function GlobalVariableNoEvalTemplate (): string {
               typeof require === 'function' &&
               typeof global === 'object')
              ? global
-             : this);
+             : typeof wx === 'object' ? wx: this);
     `;
 }
