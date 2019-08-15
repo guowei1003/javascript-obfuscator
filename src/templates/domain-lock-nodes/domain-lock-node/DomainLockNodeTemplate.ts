@@ -95,7 +95,7 @@ export function DomainLockNodeTemplate (): string {
             }
                
             if (!ok) {
-                data;
+                throw err = new Error('domainLockError')
             } else {
                 return;
             }
