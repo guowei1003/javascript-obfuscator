@@ -36,6 +36,14 @@ export class NodeGuards {
      * @param {Node} node
      * @returns {boolean}
      */
+    public static isAssignmentExpressionNode (node: ESTree.Node): node is ESTree.AssignmentExpression {
+        return node.type === NodeType.AssignmentExpression;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
     public static isAssignmentPatternNode (node: ESTree.Node): node is ESTree.AssignmentPattern {
         return node.type === NodeType.AssignmentPattern;
     }
@@ -46,6 +54,14 @@ export class NodeGuards {
      */
     public static isAwaitExpressionNode (node: ESTree.Node): node is ESTree.AwaitExpression {
         return node.type === NodeType.AwaitExpression;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isBigIntLiteralNode (node: ESTree.Node): node is ESTree.BigIntLiteral {
+        return NodeGuards.isLiteralNode(node) && !!(<ESTree.BigIntLiteral>node).bigint;
     }
 
     /**
@@ -76,16 +92,10 @@ export class NodeGuards {
      * @param {Node} node
      * @returns {boolean}
      */
-    public static isCatchClauseNode (node: ESTree.Node): node is ESTree.CatchClause {
-        return node.type === NodeType.CatchClause;
-    }
-
-    /**
-     * @param {Node} node
-     * @returns {boolean}
-     */
-    public static isClassDeclarationNode (node: ESTree.Node): node is ESTree.ClassDeclaration {
-        return node.type === NodeType.ClassDeclaration;
+    public static isClassDeclarationNode (
+        node: ESTree.Node
+    ): node is ESTree.ClassDeclaration & { id: ESTree.Identifier } {
+        return node.type === NodeType.ClassDeclaration && node.id !== null;
     }
 
     /**
@@ -94,6 +104,15 @@ export class NodeGuards {
      */
     public static isContinueStatementNode (node: ESTree.Node): node is ESTree.ContinueStatement {
         return node.type === NodeType.ContinueStatement;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isDirectiveNode (node: ESTree.Node): node is ESTree.Directive {
+        return node.type === NodeType.ExpressionStatement
+            && 'directive' in node;
     }
 
     /**
@@ -109,7 +128,8 @@ export class NodeGuards {
      * @returns {boolean}
      */
     public static isExpressionStatementNode (node: ESTree.Node): node is ESTree.ExpressionStatement {
-        return node.type === NodeType.ExpressionStatement;
+        return node.type === NodeType.ExpressionStatement
+            && !('directive' in node);
     }
 
     /**
@@ -126,8 +146,10 @@ export class NodeGuards {
      * @param {Node} node
      * @returns {boolean}
      */
-    public static isFunctionDeclarationNode (node: ESTree.Node): node is ESTree.FunctionDeclaration {
-        return node.type === NodeType.FunctionDeclaration;
+    public static isFunctionDeclarationNode (
+        node: ESTree.Node
+    ): node is ESTree.FunctionDeclaration & { id: ESTree.Identifier } {
+        return node.type === NodeType.FunctionDeclaration && node.id !== null;
     }
 
     /**
@@ -211,6 +233,7 @@ export class NodeGuards {
      * @param {Object} object
      * @returns {boolean}
      */
+    // eslint-disable-next-line @typescript-eslint/ban-types
     public static isNode (object: Object & { type?: string }): object is ESTree.Node {
         return object && !object.type !== undefined;
     }
@@ -221,6 +244,14 @@ export class NodeGuards {
      */
     public static isNodeWithLexicalScope (node: ESTree.Node): node is TNodeWithLexicalScope {
         return NodeGuards.isProgramNode(node) || NodeGuards.isFunctionNode(node);
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isNodeWithBlockLexicalScope (node: ESTree.Node): node is TNodeWithLexicalScope {
+        return NodeGuards.isNodeWithLexicalScope(node) || NodeGuards.isBlockStatementNode(node);
     }
 
     /**
@@ -288,34 +319,6 @@ export class NodeGuards {
 
     /**
      * @param {Node} node
-     * @param {Node} parentNode
-     * @returns {boolean}
-     */
-    public static isReplaceableIdentifierNode (node: ESTree.Node, parentNode: ESTree.Node): node is ESTree.Identifier {
-        if (!NodeGuards.isIdentifierNode(node)) {
-            return false;
-        }
-
-        const parentNodeIsPropertyNode: boolean = NodeGuards.isPropertyNode(parentNode) &&
-            !parentNode.computed &&
-            parentNode.key === node;
-        const parentNodeIsMemberExpressionNode: boolean = (
-            NodeGuards.isMemberExpressionNode(parentNode) &&
-            !parentNode.computed &&
-            parentNode.property === node
-        );
-        const parentNodeIsMethodDefinitionNode: boolean = NodeGuards.isMethodDefinitionNode(parentNode) &&
-            !parentNode.computed;
-        const isLabelIdentifierNode: boolean = NodeGuards.isLabelIdentifierNode(node, parentNode);
-
-        return !parentNodeIsPropertyNode &&
-            !parentNodeIsMemberExpressionNode &&
-            !parentNodeIsMethodDefinitionNode &&
-            !isLabelIdentifierNode;
-    }
-
-    /**
-     * @param {Node} node
      * @returns {boolean}
      */
     public static isRestElementNode (node: ESTree.Node): node is ESTree.RestElement {
@@ -328,6 +331,14 @@ export class NodeGuards {
      */
     public static isReturnStatementNode (node: ESTree.Node): node is ESTree.ReturnStatement {
         return node.type === NodeType.ReturnStatement;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isSequenceExpressionNode (node: ESTree.Node): node is ESTree.SequenceExpression {
+        return node.type === NodeType.SequenceExpression;
     }
 
     /**
@@ -374,8 +385,9 @@ export class NodeGuards {
      * @param {Node} node
      * @returns {boolean}
      */
-    public static isUseStrictOperator (node: ESTree.Node): node is ESTree.ExpressionStatement {
-        return node.type === NodeType.ExpressionStatement && node.directive === 'use strict';
+    public static isUseStrictOperator (node: ESTree.Node): node is ESTree.Directive {
+        return NodeGuards.isDirectiveNode(node)
+            && node.directive === 'use strict';
     }
 
     /**

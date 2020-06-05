@@ -7,7 +7,7 @@ import { IOptions } from '../../interfaces/options/IOptions';
 import { IRandomGenerator } from '../../interfaces/utils/IRandomGenerator';
 import { IVisitor } from '../../interfaces/node-transformers/IVisitor';
 
-import { TransformationStage } from '../../enums/node-transformers/TransformationStage';
+import { NodeTransformationStage } from '../../enums/node-transformers/NodeTransformationStage';
 
 import { AbstractNodeTransformer } from '../AbstractNodeTransformer';
 import { NodeFactory } from '../../node/NodeFactory';
@@ -24,7 +24,7 @@ export class TemplateLiteralTransformer extends AbstractNodeTransformer {
      * @param {IRandomGenerator} randomGenerator
      * @param {IOptions} options
      */
-    constructor (
+    public constructor (
         @inject(ServiceIdentifiers.IRandomGenerator) randomGenerator: IRandomGenerator,
         @inject(ServiceIdentifiers.IOptions) options: IOptions
     ) {
@@ -35,8 +35,8 @@ export class TemplateLiteralTransformer extends AbstractNodeTransformer {
      * @param {NodeGuards} node
      * @returns {boolean}
      */
-    private static isLiteralNodeWithStringValue (node: ESTree.Node): boolean {
-        return node && NodeGuards.isLiteralNode(node) && typeof node.value === 'string';
+    private static isLiteralNodeWithStringValue (node: ESTree.Node | undefined): boolean {
+        return !!node && NodeGuards.isLiteralNode(node) && typeof node.value === 'string';
     }
 
     /**
@@ -49,14 +49,14 @@ export class TemplateLiteralTransformer extends AbstractNodeTransformer {
     }
 
     /**
-     * @param {TransformationStage} transformationStage
+     * @param {NodeTransformationStage} nodeTransformationStage
      * @returns {IVisitor | null}
      */
-    public getVisitor (transformationStage: TransformationStage): IVisitor | null {
-        switch (transformationStage) {
-            case TransformationStage.Converting:
+    public getVisitor (nodeTransformationStage: NodeTransformationStage): IVisitor | null {
+        switch (nodeTransformationStage) {
+            case NodeTransformationStage.Converting:
                 return {
-                    leave: (node: ESTree.Node, parentNode: ESTree.Node | null) => {
+                    enter: (node: ESTree.Node, parentNode: ESTree.Node | null): ESTree.Node | undefined => {
                         if (parentNode && TemplateLiteralTransformer.isValidTemplateLiteralNode(node, parentNode)) {
                             return this.transformNode(node, parentNode);
                         }
@@ -122,6 +122,7 @@ export class TemplateLiteralTransformer extends AbstractNodeTransformer {
         }
 
         NodeUtils.parentizeAst(transformedNode);
+        NodeUtils.parentizeNode(transformedNode, parentNode);
 
         return transformedNode;
     }

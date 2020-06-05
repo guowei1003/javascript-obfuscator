@@ -1,4 +1,8 @@
 import { assert } from 'chai';
+import { TypeFromEnum } from '@gradecam/tsenum';
+
+import { TInputOptions } from '../../../src/types/options/TInputOptions';
+import { TDictionary } from '../../../src/types/TDictionary';
 
 import { IObfuscatedCode } from '../../../src/interfaces/source-code/IObfuscatedCode';
 
@@ -43,39 +47,55 @@ describe('JavaScriptObfuscator', () => {
             });
         });
 
-        describe('empty source code', () => {
-            let obfuscatedCode: string;
+        describe('Empty or invalid source code', () => {
+            describe('empty source code', () => {
+                let obfuscatedCode: string;
 
-            beforeEach(() => {
-                const code: string = readFileAsString(__dirname + '/fixtures/empty-input.js');
+                beforeEach(() => {
+                    const code: string = readFileAsString(__dirname + '/fixtures/empty-input.js');
 
-                obfuscatedCode = JavaScriptObfuscator.obfuscate(
-                    code,
-                ).getObfuscatedCode();
+                    obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                        code,
+                    ).getObfuscatedCode();
+                });
+
+                it('should return an empty obfuscated code', () => {
+                    assert.isNotOk(obfuscatedCode);
+                });
             });
 
-            it('should return an empty obfuscated code', () => {
-                assert.isNotOk(obfuscatedCode);
+            describe('empty source code with comments', () => {
+                let obfuscatedCode: string;
+
+                beforeEach(() => {
+                    const code: string = readFileAsString(__dirname + '/fixtures/comments-only.js');
+
+                    obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                        code,
+                        {
+                            controlFlowFlattening: true,
+                            deadCodeInjection: true
+                        }
+                    ).getObfuscatedCode();
+                });
+
+                it('should return an empty obfuscated code', () => {
+                    assert.isNotOk(obfuscatedCode);
+                });
             });
-        });
 
-        describe('empty source code with comments', () => {
-            let obfuscatedCode: string;
+            describe('invalid source code type', () => {
+                let obfuscatedCode: string;
 
-            beforeEach(() => {
-                const code: string = readFileAsString(__dirname + '/fixtures/comments-only.js');
+                beforeEach(() => {
+                    obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                        1 as unknown as string
+                    ).getObfuscatedCode();
+                });
 
-                obfuscatedCode = JavaScriptObfuscator.obfuscate(
-                    code,
-                    {
-                        controlFlowFlattening: true,
-                        deadCodeInjection: true
-                    }
-                ).getObfuscatedCode();
-            });
-
-            it('should return an empty obfuscated code', () => {
-                assert.isNotOk(obfuscatedCode);
+                it('should return an empty obfuscated code', () => {
+                    assert.isNotOk(obfuscatedCode);
+                });
             });
         });
 
@@ -185,7 +205,7 @@ describe('JavaScriptObfuscator', () => {
 
         describe('variable inside global scope', () => {
             describe('Variant #1: without `renameGlobals` option', () => {
-                const regExp: RegExp = /^var *test *= *0x\d+;$/;
+                const regExp: RegExp = /^var test *= *0x\d+;$/;
 
                 let obfuscatedCode: string;
 
@@ -206,7 +226,7 @@ describe('JavaScriptObfuscator', () => {
             });
 
             describe('Variant #2: with `renameGlobals` option', () => {
-                const regExp: RegExp = /^var *_0x(\w){4,6} *= *0x\d+;$/;
+                const regExp: RegExp = /^var _0x(\w){4,6} *= *0x\d+;$/;
 
                 let obfuscatedCode: string;
 
@@ -228,7 +248,7 @@ describe('JavaScriptObfuscator', () => {
             });
 
             describe('Variant #3: with `renameGlobals` and `identifiersPrefix` options', () => {
-                const regExp: RegExp = /^var *foo_0x(\w){4,6} *= *0x\d+;$/;
+                const regExp: RegExp = /^var foo_0x(\w){4,6} *= *0x\d+;$/;
 
                 let obfuscatedCode: string;
 
@@ -252,7 +272,7 @@ describe('JavaScriptObfuscator', () => {
 
             describe('Variant #4: with `stringArray`, `renameGlobals` and `identifiersPrefix` options', () => {
                 const stringArrayRegExp: RegExp = /^var foo_0x(\w){4} *= *\['abc'\];/;
-                const stringArrayCallRegExp: RegExp = /var *foo_0x(\w){4,6} *= *foo_0x(\w){4}\('0x0'\);$/;
+                const stringArrayCallRegExp: RegExp = /var foo_0x(\w){4,6} *= *foo_0x(\w){4}\('0x0'\);$/;
 
                 let obfuscatedCode: string;
 
@@ -282,7 +302,7 @@ describe('JavaScriptObfuscator', () => {
         });
 
         describe('variable inside block scope', () => {
-            const regExp: RegExp = /^\(function *\(\) *\{ *var *_0x[\w]+ *= *0x\d+; *\}(\(\)\)|\)\(\));?$/;
+            const regExp: RegExp = /^\(function *\(\) *\{ *var _0x[\w]+ *= *0x\d+; *\}(\(\)\)|\)\(\));?$/;
 
             let obfuscatedCode: string;
 
@@ -344,7 +364,7 @@ describe('JavaScriptObfuscator', () => {
 
         describe('latin literal variable value', () => {
             const stringArrayLatinRegExp: RegExp = /^var _0x(\w){4} *= *\['abc'\];/;
-            const stringArrayCallRegExp: RegExp = /var *test *= *_0x(\w){4}\('0x0'\);$/;
+            const stringArrayCallRegExp: RegExp = /var test *= *_0x(\w){4}\('0x0'\);$/;
 
             let obfuscatedCode: string;
 
@@ -372,7 +392,7 @@ describe('JavaScriptObfuscator', () => {
 
         describe('cyrillic literal variable value', () => {
             const stringArrayCyrillicRegExp: RegExp = /^var _0x(\w){4} *= *\['абц'\];/;
-            const stringArrayCallRegExp: RegExp = /var *test *= *_0x(\w){4}\('0x0'\);$/;
+            const stringArrayCallRegExp: RegExp = /var test *= *_0x(\w){4}\('0x0'\);$/;
 
             let obfuscatedCode: string;
 
@@ -527,6 +547,30 @@ describe('JavaScriptObfuscator', () => {
             });
         });
 
+        /**
+         * https://github.com/estools/escodegen/pull/408
+         */
+        describe('`ObjectPattern` with single `RestElement`', () => {
+            const regExp: RegExp = /const {\.\.\.foo} *= *{};/;
+
+            let obfuscatedCode: string;
+
+            beforeEach(() => {
+                const code: string = readFileAsString(__dirname + '/fixtures/object-pattern-single-rest-element.js');
+
+                obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                    code,
+                    {
+                        ...NO_ADDITIONAL_NODES_PRESET
+                    }
+                ).getObfuscatedCode();
+            });
+
+            it('should not break on `ObjectPattern` with single `RestElement`', () => {
+                assert.match(obfuscatedCode, regExp);
+            });
+        });
+
         describe('new.target MetaProperty', () => {
             const regExp: RegExp = /new\.target *=== *Foo/;
 
@@ -548,8 +592,74 @@ describe('JavaScriptObfuscator', () => {
             });
         });
 
+        describe('import.meta support', () => {
+            const regExp: RegExp = /console\['log']\(import\.meta\['url']\);/;
+
+            let obfuscatedCode: string;
+
+            beforeEach(() => {
+                const code: string = readFileAsString(__dirname + '/fixtures/import-meta.js');
+
+                obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                    code,
+                    {
+                        ...NO_ADDITIONAL_NODES_PRESET
+                    }
+                ).getObfuscatedCode();
+            });
+
+            it('should support `import.meta`', () => {
+                assert.match(obfuscatedCode, regExp);
+            });
+        });
+
+        /**
+         * https://github.com/estools/escodegen/pull/407
+         */
+        describe('valid exponentiation operator precedence', () => {
+            const regExp: RegExp = /var foo *= *\( *0x1 *- *0x2 *\) *\*\* *0x2;/;
+
+            let obfuscatedCode: string;
+
+            beforeEach(() => {
+                const code: string = readFileAsString(__dirname + '/fixtures/exponentiation-operator-precedence.js');
+
+                obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                    code,
+                    {
+                        ...NO_ADDITIONAL_NODES_PRESET
+                    }
+                ).getObfuscatedCode();
+            });
+
+            it('should support exponentiation operator', () => {
+                assert.match(obfuscatedCode, regExp);
+            });
+        });
+
+        describe('BigInt support', () => {
+            const regExp: RegExp = /return 0x20000000000001n *\+ *0xan *\+ *0xan;/;
+
+            let obfuscatedCode: string;
+
+            beforeEach(() => {
+                const code: string = readFileAsString(__dirname + '/fixtures/bigint-support.js');
+
+                obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                    code,
+                    {
+                        ...NO_ADDITIONAL_NODES_PRESET
+                    }
+                ).getObfuscatedCode();
+            });
+
+            it('should support BigInt', () => {
+                assert.match(obfuscatedCode, regExp);
+            });
+        });
+
         describe('mangled identifier names generator', () => {
-            const regExp: RegExp = /var *c *= *0x1/;
+            const regExp: RegExp = /var c *= *0x1/;
 
             let obfuscatedCode: string;
 
@@ -569,10 +679,38 @@ describe('JavaScriptObfuscator', () => {
             });
         });
 
+        describe('dictionary identifier names generator', () => {
+            const regExp1: RegExp = /var [abc] *= *0x1; *var [abc] *= *0x2; *var [abc] *= *0x3;/;
+            const regExp2: RegExp = /var [ABC] *= *0x4; *var [ABC] *= *0x5; *var [ABC] *= *0x6;/;
+
+            let obfuscatedCode: string;
+
+            beforeEach(() => {
+                const code: string = readFileAsString(__dirname + '/fixtures/dictionary-identifiers.js');
+
+                obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                    code,
+                    {
+                        ...NO_ADDITIONAL_NODES_PRESET,
+                        identifierNamesGenerator: IdentifierNamesGenerator.DictionaryIdentifierNamesGenerator,
+                        identifiersDictionary: ['a', 'b', 'c']
+                    }
+                ).getObfuscatedCode();
+            });
+
+            it('Match #1: should generate identifier based on the dictionary', () => {
+                assert.match(obfuscatedCode, regExp1);
+            });
+
+            it('Match #2: should generate identifier based on the dictionary', () => {
+                assert.match(obfuscatedCode, regExp2);
+            });
+        });
+
         describe('parse module', () => {
             describe('Variant #1: import', () => {
                 const importRegExp: RegExp = /import *{foo} *from *'.\/foo';/;
-                const variableDeclarationRegExp: RegExp = /var *test *= *0x1/;
+                const variableDeclarationRegExp: RegExp = /var test *= *0x1/;
 
                 let obfuscatedCode: string;
 
@@ -592,7 +730,7 @@ describe('JavaScriptObfuscator', () => {
             });
 
             describe('Variant #2: export', () => {
-                const regExp: RegExp = /export *const *foo *= *0x1;/;
+                const regExp: RegExp = /export *const foo *= *0x1;/;
 
                 let obfuscatedCode: string;
 
@@ -641,6 +779,239 @@ describe('JavaScriptObfuscator', () => {
 
             it('should correctly obfuscate 3.5k variables', () => {
                 assert.equal(result, expectedValue);
+            });
+        });
+
+        describe('Identifier names collision between base code and appended string array nodes', function () {
+            this.timeout(10000);
+
+            const samplesCount: number = 30;
+
+            let areCollisionsExists: boolean = false;
+            let obfuscateFunc: (identifierNamesGenerator: TypeFromEnum<typeof IdentifierNamesGenerator>) => string;
+
+            before(() => {
+                const code: string = readFileAsString(__dirname + '/fixtures/custom-nodes-identifier-names-collision.js');
+
+                obfuscateFunc = (identifierNamesGenerator: TypeFromEnum<typeof IdentifierNamesGenerator>) => {
+                    const obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                        code,
+                        {
+                            identifierNamesGenerator,
+                            compact: false,
+                            renameGlobals: true,
+                            identifiersDictionary: ['foo', 'bar', 'baz', 'bark', 'hawk', 'foozmos', 'cow', 'chikago'],
+                            stringArray: true
+                        }
+                    ).getObfuscatedCode();
+
+                    return obfuscatedCode;
+                };
+
+
+                [
+                    IdentifierNamesGenerator.DictionaryIdentifierNamesGenerator,
+                    IdentifierNamesGenerator.MangledIdentifierNamesGenerator
+                ].forEach((identifierNamesGenerator: TypeFromEnum<typeof IdentifierNamesGenerator>) => {
+                    for (let i = 0; i < samplesCount; i++) {
+                        try {
+                            eval(obfuscateFunc(identifierNamesGenerator));
+                        } catch {
+                            areCollisionsExists = true;
+                            break;
+                        }
+                    }
+                });
+            });
+
+            it('It does not create identifier names collision', () => {
+                assert.equal(areCollisionsExists, false);
+            });
+        });
+
+        describe('Prevailing kind of variables', () => {
+            const baseParams: TInputOptions = {
+                compact: true,
+                controlFlowFlattening: true,
+                controlFlowFlatteningThreshold: 1,
+                deadCodeInjection: true,
+                deadCodeInjectionThreshold: 1,
+                debugProtection: true,
+                debugProtectionInterval: true,
+                disableConsoleOutput: false,
+                rotateStringArray: true,
+                selfDefending: true,
+                stringArray: true,
+                stringArrayThreshold: 1,
+                transformObjectKeys: true,
+                unicodeEscapeSequence: false
+            };
+
+            describe('`var` kind', function () {
+                let obfuscatedCode: string;
+
+                before(() => {
+                    const code: string = readFileAsString(__dirname + '/fixtures/prevailing-kind-of-variables-var.js');
+
+                    obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                        code,
+                        {
+                            ...NO_ADDITIONAL_NODES_PRESET,
+                            ...baseParams,
+                            stringArrayEncoding: StringArrayEncoding.Rc4
+                        }
+                    ).getObfuscatedCode();
+
+                });
+
+                it('does not break on run', () => {
+                    assert.doesNotThrow(() => eval(obfuscatedCode));
+                });
+            });
+
+            describe('`const` kind', function () {
+                describe('Variant #1: StringArrayEncoding: rc4', () => {
+                    let obfuscatedCode: string;
+
+                    before(() => {
+                        const code: string = readFileAsString(__dirname + '/fixtures/prevailing-kind-of-variables-const.js');
+
+                        obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                            code,
+                            {
+                                ...NO_ADDITIONAL_NODES_PRESET,
+                                ...baseParams,
+                                stringArrayEncoding: StringArrayEncoding.Rc4
+                            }
+                        ).getObfuscatedCode();
+
+                    });
+
+                    it('does not break on run', () => {
+                        assert.doesNotThrow(() => eval(obfuscatedCode));
+                    });
+                });
+
+                describe('Variant #2: StringArrayEncoding: base64', () => {
+                    let obfuscatedCode: string;
+
+                    before(() => {
+                        const code: string = readFileAsString(__dirname + '/fixtures/prevailing-kind-of-variables-const.js');
+
+                        obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                            code,
+                            {
+                                ...NO_ADDITIONAL_NODES_PRESET,
+                                ...baseParams,
+                                stringArrayEncoding: StringArrayEncoding.Rc4
+                            }
+                        ).getObfuscatedCode();
+                    });
+
+                    it('does not break on run', () => {
+                        assert.doesNotThrow(() => eval(obfuscatedCode));
+                    });
+                });
+            });
+
+            describe('`let` kind', function () {
+                describe('Variant #1: StringArrayEncoding: rc4', () => {
+                    let obfuscatedCode: string;
+
+                    before(() => {
+                        const code: string = readFileAsString(__dirname + '/fixtures/prevailing-kind-of-variables-let.js');
+
+                        obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                            code,
+                            {
+                                ...NO_ADDITIONAL_NODES_PRESET,
+                                ...baseParams,
+                                stringArrayEncoding: StringArrayEncoding.Rc4
+                            }
+                        ).getObfuscatedCode();
+
+                    });
+
+                    it('does not break on run', () => {
+                        assert.doesNotThrow(() => eval(obfuscatedCode));
+                    });
+                });
+
+                describe('Variant #2: StringArrayEncoding: base64', () => {
+                    let obfuscatedCode: string;
+
+                    before(() => {
+                        const code: string = readFileAsString(__dirname + '/fixtures/prevailing-kind-of-variables-let.js');
+
+                        obfuscatedCode = JavaScriptObfuscator.obfuscate(
+                            code,
+                            {
+                                ...NO_ADDITIONAL_NODES_PRESET,
+                                ...baseParams,
+                                stringArrayEncoding: StringArrayEncoding.Base64
+                            }
+                        ).getObfuscatedCode();
+
+                    });
+
+                    it('does not break on run', () => {
+                        assert.doesNotThrow(() => eval(obfuscatedCode));
+                    });
+                });
+            });
+        });
+    });
+
+    describe('obfuscateMultiple', () => {
+        describe('multiple source codes', () => {
+            const regExp1: RegExp = /var a0_0x(\w){4,6} *= *0x1;/;
+            const regExp2: RegExp = /var a1_0x(\w){4,6} *= *'abc';/;
+
+            let obfuscatedCode1: string;
+            let obfuscatedCode2: string;
+
+            beforeEach(() => {
+                const sourceCode1: string = readFileAsString(__dirname + '/fixtures/simple-input-1.js');
+                const sourceCode2: string = readFileAsString(__dirname + '/fixtures/simple-input-2.js');
+                const obfuscationResultsObject = JavaScriptObfuscator.obfuscateMultiple(
+                    {
+                        sourceCode1,
+                        sourceCode2
+                    },
+                    {
+                        ...NO_ADDITIONAL_NODES_PRESET,
+                        renameGlobals: true
+                    }
+                );
+
+                obfuscatedCode1 = obfuscationResultsObject.sourceCode1.getObfuscatedCode();
+                obfuscatedCode2 = obfuscationResultsObject.sourceCode2.getObfuscatedCode();
+            });
+
+            it('Match #1: should return correct obfuscated code', () => {
+                assert.match(obfuscatedCode1, regExp1);
+            });
+
+            it('Match #2: should return correct obfuscated code', () => {
+                assert.match(obfuscatedCode2, regExp2);
+            });
+        });
+
+        describe('invalid source codes object', () => {
+            let testFunc: () => TDictionary<IObfuscatedCode>;
+
+            beforeEach(() => {
+                testFunc = () => JavaScriptObfuscator.obfuscateMultiple(
+                    'foo' as any,
+                    {
+                        ...NO_ADDITIONAL_NODES_PRESET,
+                        renameGlobals: true
+                    }
+                );
+            });
+
+            it('Should throw an error if source codes object is not a plain object', () => {
+                assert.throw(testFunc, Error);
             });
         });
     });

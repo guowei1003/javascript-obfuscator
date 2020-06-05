@@ -1,5 +1,257 @@
 Change Log
-===
+
+v1.0.0
+---
+* Looks like obfuscator is ready for the first stable release
+
+v0.28.5
+---
+* Fixed error during code generation for `ObjectPattern` with single `RestElement`. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/607
+
+v0.28.4
+---
+* Added correct `self-defending` code for `target: 'browser-no-eval'`. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/610
+
+v0.28.3
+---
+* Removed memory leak with `identifierNamesGenerator: 'mangled'`
+
+v0.28.2
+---
+* Fixed change of kinds of variables for dead code with `deadCodeInjection` option
+
+v0.28.1
+---
+* Removed `acorn-import-meta` package
+
+v0.28.0
+---
+* Added BigInt support. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/588
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/554
+
+v0.27.4
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/590
+
+v0.27.3
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/593
+
+v0.27.2
+---
+* Fixed identifiers prefix generation for `obfuscateMultiple` method
+
+v0.27.1
+---
+* Dependencies update, fixed https://www.npmjs.com/advisories/1488
+
+v0.27.0
+---
+* **Feature:** new method `obfuscateMultiple` to obfuscation of multiple source codes
+
+v0.26.0
+---
+* **Internal:** new code transformers mechanism
+* Supported obfuscation of files with hashbang operator, https://github.com/javascript-obfuscator/javascript-obfuscator/issues/471
+
+v0.25.5
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/575
+
+v0.25.4
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/569
+
+v0.25.3
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/568
+
+v0.25.2
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/563
+
+v0.25.1
+---
+* Additional fixes of https://github.com/javascript-obfuscator/javascript-obfuscator/issues/550
+
+v0.25.0
+---
+* Improved `mangled` identifier names generator logic
+* Improved `selfDefending` helper logic
+* Fixed a bunch of conflicts between generated identifier names. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/550. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/549
+* Prevented transformation of object keys in sequence expression that has `super` call
+* Support of output directory paths with a dot symbol
+* Changed `--output` logic. Now `--output` value can describe if it's a file or a directory path. Check README.md for more info
+
+v0.24.6
+---
+* Fixed support of exponentiation operator. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/534
+* Added file path to the error message during directory obfuscation. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/513
+
+v0.24.5
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/542
+
+v0.24.4
+---
+* Fixed rc4 encoded value collision: https://github.com/javascript-obfuscator/javascript-obfuscator/issues/538
+
+v0.24.3
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/535
+
+v0.24.2
+---
+* Reverted validation errors under `node` target for `sourceMap*` options
+
+v0.24.1
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/531
+
+v0.24.0
+---
+* **Internal refactoring:** completely new mechanism to rename variable names
+* Dynamic import and `import.meta` support. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/505
+* Now usage of some browser-related options with `target: 'node'` will cause a validation error
+* Increased `identifierNamesGenerator: 'mangled` speed
+* **CLI:** a file path will be displayed on obfuscation error. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/513
+* Fixed many `transformObjectKeys` runtime errors
+* Fixed `Maximum call stack size exceeded` error on large strings when `splitString` option is enabled
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/516
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/512
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/496
+* **Internal:** switched from `awesome-typescript-loader` on `ts-loader`
+
+v0.23.2
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/475
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/326
+
+v0.23.1
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/498
+
+v0.23.0
+---
+* **New option:** `shuffleStringArray` randomly shuffles string array items
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/494
+* **Internal change:** switched AST parser from `espree` on `acorn`
+* **Internal refactoring:** refactoring of string array storage and related things
+
+v0.22.1
+---
+* Fixed `TypeError: Assignment to constant variable` when auto-detection of kind of variables is inserted `const` variables for `controlFlowStorage` nodes
+
+v0.22.0
+---
+* **Breaking:** auto-detection of kind of variables of inserted nodes, based on most prevailing kind of variables of source code
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/486
+
+v0.21.1
+---
+* Fixed conditional comments in some rare cases
+
+
+v0.21.0
+---
+* Improved `transformObjectKeys` transformation to cover more cases
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/406
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/387
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/333
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/328
+
+v0.20.4
+---
+* Fixed typings. Now string values correctly assignable to enum-like options
+
+v0.20.3
+---
+* Fixed `for-await-of` statement: https://github.com/javascript-obfuscator/javascript-obfuscator/issues/419
+
+v0.20.2
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/pull/442
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/468
+* Added funding button
+* Internal dependencies update, Happy New Year 2020!
+
+v0.20.1
+---
+* Fixed identifier names generations for `mangled` and `dictionary` identifier names generators
+* Fixed combination of `identifierNamesGenerator: dictionary` and `debugProtection` options
+* `seed` option now accepts `string` and `number` values
+
+v0.20.0
+---
+* **Breaking:** dropped support of Node 8 because of end of maintenance support
+* **New option value:** `identifierNamesGenerator` now allows to set new `dictionary` identifier names generator
+* **New option:** `identifiersDictionary` sets identifiers dictionary for `identifierNamesGenerator: dictionary` option
+
+Thanks to our contributors!
+ * [adiantek](https://github.com/adiantek)
+
+v0.19.4
+---
+* Fixed `reservedNames` option
+
+Thanks to our contributors!
+ * [kida7](https://github.com/kida7)
+ 
+v0.19.3
+---
+* The `splitStrings` option now correctly works with `transformObjectKeys` option
+* Internal `TransformersRunner` rework to support topological sort of node transformers
+
+v0.19.2
+---
+* The `splitStrings` option now correctly splits strings inside objects
+
+v0.19.1
+---
+* The `splitStrings` option now affects template literal strings
+
+v0.19.0
+---
+* **New option:** `splitStrings` splits literal strings into chunks with length of `splitStringsChunkLength` option value
+* **New option:** `splitStringsChunkLength` sets chunk length of `splitStrings` option
+
+v0.18.8
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/452
+
+v0.18.7
+---
+* Fixed https://github.com/javascript-obfuscator/gulp-javascript-obfuscator/issues/22 
+
+v0.18.6
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/355 
+
+Thanks to our contributors!
+ * [Zamotkin](https://github.com/zamotkin)
+
+v0.18.5
+---
+* Breaking: require Node.js 8 after dependencies update
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/321
+
+Thanks to our contributors!
+ * [Zamotkin](https://github.com/zamotkin)
+
+v0.18.4
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/437
+
+Thanks to our contributors!
+ * [Zamotkin](https://github.com/zamotkin)
+
+v0.18.3
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/424
+
+Thanks to our contributors!
+ * [Zamotkin](https://github.com/zamotkin)
+
 v0.18.2
 ---
 * Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/320

@@ -4,11 +4,13 @@ import { ServiceIdentifiers } from '../../ServiceIdentifiers';
 import { IArrayUtils } from '../../../interfaces/utils/IArrayUtils';
 import { ICryptUtils } from '../../../interfaces/utils/ICryptUtils';
 import { IEscapeSequenceEncoder } from '../../../interfaces/utils/IEscapeSequenceEncoder';
+import { ILevelledTopologicalSorter } from '../../../interfaces/utils/ILevelledTopologicalSorter';
 import { IRandomGenerator } from '../../../interfaces/utils/IRandomGenerator';
 
 import { ArrayUtils } from '../../../utils/ArrayUtils';
 import { CryptUtils } from '../../../utils/CryptUtils';
 import { EscapeSequenceEncoder } from '../../../utils/EscapeSequenceEncoder';
+import { LevelledTopologicalSorter } from '../../../utils/LevelledTopologicalSorter';
 import { RandomGenerator } from '../../../utils/RandomGenerator';
 
 export const utilsModule: interfaces.ContainerModule = new ContainerModule((bind: interfaces.Bind) => {
@@ -31,4 +33,8 @@ export const utilsModule: interfaces.ContainerModule = new ContainerModule((bind
     bind<IEscapeSequenceEncoder>(ServiceIdentifiers.IEscapeSequenceEncoder)
         .to(EscapeSequenceEncoder)
         .inSingletonScope();
+
+    // levelled topological sorter
+    bind<ILevelledTopologicalSorter>(ServiceIdentifiers.ILevelledTopologicalSorter)
+        .to(LevelledTopologicalSorter);
 });

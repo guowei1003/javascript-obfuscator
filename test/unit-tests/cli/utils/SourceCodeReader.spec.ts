@@ -3,7 +3,6 @@ import * as mkdirp from 'mkdirp';
 import * as rimraf from 'rimraf';
 
 import { assert } from 'chai';
-import * as sinon from 'sinon';
 
 import { IFileData } from '../../../../src/interfaces/cli/IFileData';
 
@@ -23,16 +22,20 @@ describe('SourceCodeReader', () => {
             describe('Variant #1: `inputPath` is a valid path', () => {
                 const tmpFileName: string = 'test.js';
                 const inputPath: string = `${tmpDirectoryPath}/${tmpFileName}`;
+                const expectedFilesData: IFileData[] = [{
+                    content: fileContent,
+                    filePath: inputPath
+                }];
 
-                let result: string | IFileData[];
+                let filesData: IFileData[];
 
                 before(() => {
                     fs.writeFileSync(inputPath, fileContent);
-                    result = new SourceCodeReader({}).readSourceCode(inputPath);
+                    filesData = new SourceCodeReader(inputPath, {}).readSourceCode();
                 });
 
-                it('should return content of file', () => {
-                    assert.equal(result, fileContent);
+                it('should return valid files data', () => {
+                    assert.deepEqual(filesData, expectedFilesData);
                 });
 
                 after(() => {
@@ -47,7 +50,7 @@ describe('SourceCodeReader', () => {
                 let testFunc: () => void;
 
                 before(() => {
-                    testFunc = () => new SourceCodeReader({}).readSourceCode(inputPath);
+                    testFunc = () => new SourceCodeReader(inputPath, {}).readSourceCode();
                 });
 
                 it('should throw an error if `inputPath` is not a valid path', () => {
@@ -63,7 +66,7 @@ describe('SourceCodeReader', () => {
 
                 before(() => {
                     fs.writeFileSync(inputPath, fileContent);
-                    testFunc = () => new SourceCodeReader({}).readSourceCode(inputPath);
+                    testFunc = () => new SourceCodeReader(inputPath, {}).readSourceCode();
                 });
 
                 it('should throw an error if `inputPath` has invalid extension', () => {
@@ -79,17 +82,25 @@ describe('SourceCodeReader', () => {
                 describe('Variant #1: `inputPath` isn\'t excluded path', () => {
                     const tmpFileName: string = 'test.js';
                     const inputPath: string = `${tmpDirectoryPath}/${tmpFileName}`;
+                    const expectedFilesData: IFileData[] = [{
+                        content: fileContent,
+                        filePath: inputPath
+                    }];
 
-                    let result: string | IFileData[];
+                    let filesData: IFileData[];
 
                     before(() => {
                         fs.writeFileSync(inputPath, fileContent);
-                        result = new SourceCodeReader({
-                            exclude: ['**/foo.js']
-                        }).readSourceCode(inputPath);                });
+                        filesData = new SourceCodeReader(
+                            inputPath,
+                            {
+                                exclude: ['**/foo.js']
+                            }
+                        ).readSourceCode();
+                    });
 
-                    it('should return content of file', () => {
-                        assert.equal(result, fileContent);
+                    it('should return valid files data', () => {
+                        assert.deepEqual(filesData, expectedFilesData);
                     });
 
                     after(() => {
@@ -106,9 +117,12 @@ describe('SourceCodeReader', () => {
 
                         before(() => {
                             fs.writeFileSync(inputPath, fileContent);
-                            testFunc = () => new SourceCodeReader({
-                                exclude: [`**/${tmpFileName}`]
-                            }).readSourceCode(inputPath);
+                            testFunc = () => new SourceCodeReader(
+                                inputPath,
+                                {
+                                    exclude: [`**/${tmpFileName}`]
+                                }
+                            ).readSourceCode();
                         });
 
                         it('should throw an error if `inputPath` is the excluded file path', () => {
@@ -128,9 +142,12 @@ describe('SourceCodeReader', () => {
 
                         before(() => {
                             fs.writeFileSync(inputPath, fileContent);
-                            testFunc = () => new SourceCodeReader({
-                                exclude: [tmpFileName]
-                            }).readSourceCode(inputPath);
+                            testFunc = () => new SourceCodeReader(
+                                inputPath,
+                                {
+                                    exclude: [tmpFileName]
+                                }
+                            ).readSourceCode();
                         });
 
                         it('should throw an error if `inputPath` is the excluded file path', () => {
@@ -150,9 +167,12 @@ describe('SourceCodeReader', () => {
 
                         before(() => {
                             fs.writeFileSync(inputPath, fileContent);
-                            testFunc = () => new SourceCodeReader({
-                                exclude: [inputPath]
-                            }).readSourceCode(inputPath);
+                            testFunc = () => new SourceCodeReader(
+                                inputPath,
+                                {
+                                    exclude: [inputPath]
+                                }
+                            ).readSourceCode();
                         });
 
                         it('should throw an error if `inputPath` is the excluded file path', () => {
@@ -189,14 +209,14 @@ describe('SourceCodeReader', () => {
                     }
                 ];
 
-                let result: string | IFileData[];
+                let result: IFileData[];
 
                 before(() => {
                     fs.writeFileSync(filePath1, fileContent);
                     fs.writeFileSync(filePath2, fileContent);
                     fs.writeFileSync(filePath3, fileContent);
                     fs.writeFileSync(filePath4, fileContent);
-                    result = new SourceCodeReader({}).readSourceCode(tmpDirectoryPath);
+                    result = new SourceCodeReader(tmpDirectoryPath, {}).readSourceCode();
                 });
 
                 it('should return files data', () => {
@@ -217,7 +237,7 @@ describe('SourceCodeReader', () => {
                 let testFunc: () => void;
 
                 before(() => {
-                    testFunc = () => new SourceCodeReader({}).readSourceCode(inputPath);
+                    testFunc = () => new SourceCodeReader(inputPath, {}).readSourceCode();
                 });
 
                 it('should throw an error if `inputPath` is not a valid path', () => {
@@ -258,7 +278,7 @@ describe('SourceCodeReader', () => {
                     }
                 ];
 
-                let result: string | IFileData[];
+                let result: IFileData[];
 
                 before(() => {
                     mkdirp.sync(parentDirectoryPath1);
@@ -267,7 +287,7 @@ describe('SourceCodeReader', () => {
                     fs.writeFileSync(filePath2, fileContent);
                     fs.writeFileSync(filePath3, fileContent);
                     fs.writeFileSync(filePath4, fileContent);
-                    result = new SourceCodeReader({}).readSourceCode(tmpDirectoryPath);
+                    result = new SourceCodeReader(tmpDirectoryPath, {}).readSourceCode();
                 });
 
                 it('should return files data', () => {
@@ -306,16 +326,19 @@ describe('SourceCodeReader', () => {
                         }
                     ];
 
-                    let result: string | IFileData[];
+                    let result: IFileData[];
 
                     before(() => {
                         fs.writeFileSync(filePath1, fileContent);
                         fs.writeFileSync(filePath2, fileContent);
                         fs.writeFileSync(filePath3, fileContent);
                         fs.writeFileSync(filePath4, fileContent);
-                        result = new SourceCodeReader({
-                            exclude: ['**/hawk.js']
-                        }).readSourceCode(tmpDirectoryPath);
+                        result = new SourceCodeReader(
+                            tmpDirectoryPath,
+                            {
+                                exclude: ['**/hawk.js']
+                            }
+                        ).readSourceCode();
                     });
 
                     it('should return files data', () => {
@@ -352,19 +375,22 @@ describe('SourceCodeReader', () => {
                             }
                         ];
 
-                        let result: string | IFileData[];
+                        let result: IFileData[];
 
                         before(() => {
                             fs.writeFileSync(filePath1, fileContent);
                             fs.writeFileSync(filePath2, fileContent);
                             fs.writeFileSync(filePath3, fileContent);
                             fs.writeFileSync(filePath4, fileContent);
-                            result = new SourceCodeReader({
-                                exclude: [
-                                    `**/${tmpFileName2}`,
-                                    `**/${tmpFileName4}`
-                                ]
-                            }).readSourceCode(tmpDirectoryPath);
+                            result = new SourceCodeReader(
+                                tmpDirectoryPath,
+                                {
+                                    exclude: [
+                                        `**/${tmpFileName2}`,
+                                        `**/${tmpFileName4}`
+                                    ]
+                                }
+                            ).readSourceCode();
                         });
 
                         it('should return files data', () => {
@@ -400,19 +426,22 @@ describe('SourceCodeReader', () => {
                             }
                         ];
 
-                        let result: string | IFileData[];
+                        let result: IFileData[];
 
                         before(() => {
                             fs.writeFileSync(filePath1, fileContent);
                             fs.writeFileSync(filePath2, fileContent);
                             fs.writeFileSync(filePath3, fileContent);
                             fs.writeFileSync(filePath4, fileContent);
-                            result = new SourceCodeReader({
-                                exclude: [
-                                    tmpFileName2,
-                                    tmpFileName4
-                                ]
-                            }).readSourceCode(tmpDirectoryPath);
+                            result = new SourceCodeReader(
+                                tmpDirectoryPath,
+                                {
+                                    exclude: [
+                                        tmpFileName2,
+                                        tmpFileName4
+                                    ]
+                                }
+                            ).readSourceCode();
                         });
 
                         it('should return files data', () => {
@@ -448,19 +477,22 @@ describe('SourceCodeReader', () => {
                             }
                         ];
 
-                        let result: string | IFileData[];
+                        let result: IFileData[];
 
                         before(() => {
                             fs.writeFileSync(filePath1, fileContent);
                             fs.writeFileSync(filePath2, fileContent);
                             fs.writeFileSync(filePath3, fileContent);
                             fs.writeFileSync(filePath4, fileContent);
-                            result = new SourceCodeReader({
-                                exclude: [
-                                    filePath2,
-                                    filePath4
-                                ]
-                            }).readSourceCode(tmpDirectoryPath);
+                            result = new SourceCodeReader(
+                                tmpDirectoryPath,
+                                {
+                                    exclude: [
+                                        filePath2,
+                                        filePath4
+                                    ]
+                                }
+                            ).readSourceCode();
                         });
 
                         it('should return files data', () => {
@@ -492,9 +524,12 @@ describe('SourceCodeReader', () => {
                             fs.writeFileSync(filePath2, fileContent);
                             fs.writeFileSync(filePath3, fileContent);
                             fs.writeFileSync(filePath4, fileContent);
-                            testFunc = () => new SourceCodeReader({
-                                exclude: [tmpDirectoryPath]
-                            }).readSourceCode(tmpDirectoryPath);
+                            testFunc = () => new SourceCodeReader(
+                                tmpDirectoryPath,
+                                {
+                                    exclude: [tmpDirectoryPath]
+                                }
+                            ).readSourceCode();
                         });
 
                         it('should return files data', () => {
@@ -510,40 +545,35 @@ describe('SourceCodeReader', () => {
                     });
                 });
             });
-        });
 
-        describe('Variant #3: logging', () => {
-            const tmpFileName: string = 'test.js';
-            const inputPath: string = `${tmpDirectoryPath}/${tmpFileName}`;
-            const expectedConsoleLogCallResult: boolean = true;
-            const expectedLoggingMessage: string = `[javascript-obfuscator-cli] Obfuscating file: ${inputPath}...`;
+            describe('Variant #5: `inputPath` is a valid path with dot', () => {
+                const tmpDirectoryWithDotPath: string = `${tmpDirectoryPath}.bar`;
+                const tmpFileName: string = 'foo.js';
+                const filePath: string = `${tmpDirectoryWithDotPath}/${tmpFileName}`;
 
-            let consoleLogSpy: sinon.SinonSpy,
-                consoleLogCallResult: boolean,
-                loggingMessageResult: string;
+                const expectedResult: IFileData[] = [
+                    {
+                        filePath: filePath,
+                        content: fileContent
+                    }
+                ];
 
-            before(() => {
-                consoleLogSpy = sinon.spy(console, 'log');
+                let result: IFileData[];
 
-                fs.writeFileSync(inputPath, fileContent);
-                new SourceCodeReader({}).readSourceCode(inputPath);
+                before(() => {
+                    mkdirp.sync(tmpDirectoryWithDotPath);
+                    fs.writeFileSync(filePath, fileContent);
+                    result = new SourceCodeReader(tmpDirectoryWithDotPath, {}).readSourceCode();
+                });
 
-                consoleLogCallResult = consoleLogSpy.called;
-                loggingMessageResult = consoleLogSpy.getCall(0).args[0];
-            });
+                it('should return files data', () => {
+                    assert.deepEqual(result, expectedResult);
+                });
 
-            it('should call `console.log`', () => {
-                assert.equal(consoleLogCallResult, expectedConsoleLogCallResult);
-            });
-
-            it('should log file name to the console', () => {
-                assert.include(loggingMessageResult, expectedLoggingMessage);
-            });
-
-
-            after(() => {
-                consoleLogSpy.restore();
-                fs.unlinkSync(inputPath);
+                after(() => {
+                    fs.unlinkSync(filePath);
+                    rimraf.sync(tmpDirectoryWithDotPath);
+                });
             });
         });
     });

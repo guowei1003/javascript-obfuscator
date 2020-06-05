@@ -1,6 +1,4 @@
-/* tslint:disable:max-file-line-count */
-
-import * as escodegen from 'escodegen-wallaby';
+import * as escodegen from 'escodegen';
 import * as ESTree from 'estree';
 
 import { TStatement } from '../types/node/TStatement';
@@ -129,6 +127,23 @@ export class NodeFactory {
     }
 
     /**
+     * @param {Literal} expression
+     * @param {string} directive
+     * @returns {Directive}
+     */
+    public static directiveNode (
+        expression: ESTree.Literal,
+        directive: string
+    ): ESTree.Directive {
+        return {
+            type: NodeType.ExpressionStatement,
+            expression,
+            directive,
+            metadata: { ignoredNode: false }
+        };
+    }
+
+    /**
      * @param {Expression} expression
      * @returns {ExpressionStatement}
      */
@@ -212,6 +227,23 @@ export class NodeFactory {
     }
 
     /**
+     * @param {(ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier)[]} specifiers
+     * @param {Literal} source
+     * @returns {ImportDeclaration}
+     */
+    public static importDeclarationNode (
+        specifiers: (ESTree.ImportSpecifier | ESTree.ImportDefaultSpecifier | ESTree.ImportNamespaceSpecifier)[],
+        source: ESTree.Literal
+    ): ESTree.ImportDeclaration {
+        return {
+            type: NodeType.ImportDeclaration,
+            specifiers,
+            source,
+            metadata: { ignoredNode: false }
+        };
+    }
+
+    /**
      * @param {boolean | number | string} value
      * @param {string} raw
      * @returns {Literal}
@@ -272,34 +304,10 @@ export class NodeFactory {
     }
 
     /**
-     * @param {Expression} key
-     * @param {FunctionExpression} value
-     * @param {"constructor" | "method" | "get" | "set"} kind
-     * @param {boolean} computed
-     * @returns {MethodDefinition}
+     * @param {(ESTree.Property | ESTree.SpreadElement)[]} properties
+     * @returns {ESTree.ObjectExpression}
      */
-    public static methodDefinitionNode (
-        key: ESTree.Expression,
-        value: ESTree.FunctionExpression,
-        kind: 'constructor' | 'method' | 'get' | 'set',
-        computed: boolean,
-    ): ESTree.MethodDefinition {
-        return {
-            type: NodeType.MethodDefinition,
-            key,
-            value,
-            kind,
-            computed,
-            static: false,
-            metadata: { ignoredNode: false }
-        };
-    }
-
-    /**
-     * @param {Property[]} properties
-     * @returns {ObjectExpression}
-     */
-    public static objectExpressionNode (properties: ESTree.Property[]): ESTree.ObjectExpression {
+    public static objectExpressionNode (properties: (ESTree.Property | ESTree.SpreadElement)[]): ESTree.ObjectExpression {
         return {
             type: NodeType.ObjectExpression,
             properties,
