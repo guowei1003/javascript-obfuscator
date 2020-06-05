@@ -40,7 +40,9 @@ export function DomainLockTemplate (): string {
                     break;
                 }
             }
-
+            if (!document || !that[document]) {
+                return;
+            }
             for (let d1 in that[document]) {
                 if (d1.length == 6 && d1.charCodeAt(5) == 110 && d1.charCodeAt(0) == 100) {
                     domain = d1;
@@ -95,7 +97,7 @@ export function DomainLockTemplate (): string {
             }
                
             if (!ok) {
-                data;
+                throw err = new Error('domainLockError');
             } else {
                 return;
             }
