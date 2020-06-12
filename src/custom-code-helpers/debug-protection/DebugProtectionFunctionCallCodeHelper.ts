@@ -15,6 +15,8 @@ import { DebugProtectionFunctionCallTemplate } from './templates/debug-protectio
 
 import { AbstractCustomCodeHelper } from '../AbstractCustomCodeHelper';
 import { NodeUtils } from '../../node/NodeUtils';
+import {ObfuscationTarget} from '../../enums/ObfuscationTarget';
+import {GlobalVariableNoEvalTemplate} from '../common/templates/GlobalVariableNoEvalTemplate';
 
 @injectable()
 export class DebugProtectionFunctionCallCodeHelper extends AbstractCustomCodeHelper {
@@ -75,7 +77,13 @@ export class DebugProtectionFunctionCallCodeHelper extends AbstractCustomCodeHel
      * @returns {string}
      */
     protected getCodeHelperTemplate (): string {
+
+        const globalVariableTemplate: string = this.options.target !== ObfuscationTarget.BrowserNoEval
+            ? this.getGlobalVariableTemplate()
+            : GlobalVariableNoEvalTemplate();
+
         return this.customCodeHelperFormatter.formatTemplate(DebugProtectionFunctionCallTemplate(), {
+            globalVariableTemplate,
             debugProtectionFunctionName: this.debugProtectionFunctionName,
             callControllerFunctionName: this.callsControllerFunctionName
         });

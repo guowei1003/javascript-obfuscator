@@ -4,6 +4,9 @@
 export function DebugProtectionFunctionTemplate (): string {
     return `
         function {debugProtectionFunctionName} (ret) {
+        
+            {globalVariableTemplate}
+        
             function debuggerProtection (counter) {
             
                 {debuggerTemplate}
