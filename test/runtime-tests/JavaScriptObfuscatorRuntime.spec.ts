@@ -25,6 +25,9 @@ describe('JavaScriptObfuscator runtime eval', function () {
         debugProtection: true,
         disableConsoleOutput: true,
         domainLock: ['obfuscator.io'],
+        numbersToExpressions: true,
+        simplify: true,
+        renameProperties: true,
         reservedNames: ['generate', 'sha256'],
         rotateStringArray: true,
         selfDefending: true,
@@ -55,6 +58,14 @@ describe('JavaScriptObfuscator runtime eval', function () {
         {
             identifierNamesGenerator: IdentifierNamesGenerator.MangledIdentifierNamesGenerator,
             renameGlobals: true
+        },
+        {
+            identifierNamesGenerator: IdentifierNamesGenerator.MangledShuffledIdentifierNamesGenerator,
+            renameGlobals: false
+        },
+        {
+            identifierNamesGenerator: IdentifierNamesGenerator.MangledShuffledIdentifierNamesGenerator,
+            renameGlobals: true
         }
     ].forEach((options: Partial<TInputOptions>) => {
         const detailedDescription: string = `Identifier names generator: ${options.identifierNamesGenerator}, rename globals: ${options.renameGlobals?.toString()}`;
@@ -67,7 +78,8 @@ describe('JavaScriptObfuscator runtime eval', function () {
                     code,
                     {
                         ...baseOptions,
-                        ...options
+                        ...options,
+                        renameProperties: false
                     }
                 ).getObfuscatedCode();
 
@@ -167,7 +179,7 @@ describe('JavaScriptObfuscator runtime eval', function () {
         });
 
         describe(`Obfuscator. ${detailedDescription}`, () => {
-            const evaluationTimeout: number = 10000;
+            const evaluationTimeout: number = 50000;
 
             let evaluationResult: string;
 
@@ -178,7 +190,8 @@ describe('JavaScriptObfuscator runtime eval', function () {
                     code,
                     {
                         ...baseOptions,
-                        ...options
+                        ...options,
+                        renameProperties: false
                     }
                 ).getObfuscatedCode();
 
@@ -198,7 +211,7 @@ describe('JavaScriptObfuscator runtime eval', function () {
                         evaluationResult = result;
                     })
                     .catch((error: Error) => {
-                        evaluationResult = `${error.message}. ${error.stack}`;
+                        evaluationResult = `${error.message}. ${error.stack}. Code: ${obfuscatedCode}`;
                     });
             });
 
@@ -248,14 +261,19 @@ describe('JavaScriptObfuscator runtime eval', function () {
                         {
                             ...baseOptions,
                             ...options,
-                            ...webpackBootstrapOptions
+                            ...webpackBootstrapOptions,
+                            reservedNames: ['^foo$']
                         }
                     ).getObfuscatedCode();
 
-                    evaluationResult = eval(`
-                        ${getEnvironmentCode()}
-                        ${obfuscatedCode}
-                    `);
+                    try {
+                        evaluationResult = eval(`
+                            ${getEnvironmentCode()}
+                            ${obfuscatedCode}
+                        `);
+                    } catch (e) {
+                        throw new Error(`Evaluation error: ${e.message}. Code: ${obfuscatedCode}`);
+                    }
                 });
 
                 it('should obfuscate code without any runtime errors after obfuscation: Variant #4 webpack bootstrap', () => {

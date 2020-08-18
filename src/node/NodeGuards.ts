@@ -119,6 +119,14 @@ export class NodeGuards {
      * @param {Node} node
      * @returns {boolean}
      */
+    public static isExportAllDeclarationNode (node: ESTree.Node): node is ESTree.ExportAllDeclaration {
+        return node.type === NodeType.ExportAllDeclaration;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
     public static isExportNamedDeclarationNode (node: ESTree.Node): node is ESTree.ExportNamedDeclaration {
         return node.type === NodeType.ExportNamedDeclaration;
     }
@@ -166,6 +174,14 @@ export class NodeGuards {
      */
     public static isIdentifierNode (node: ESTree.Node): node is ESTree.Identifier {
         return node.type === NodeType.Identifier;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isIfStatementNode (node: ESTree.Node): node is ESTree.IfStatement {
+        return node.type === NodeType.IfStatement;
     }
 
     /**
@@ -412,5 +428,13 @@ export class NodeGuards {
      */
     public static isWhileStatementNode (node: ESTree.Node): node is ESTree.WhileStatement {
         return node.type === NodeType.WhileStatement;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isYieldExpressionNode (node: ESTree.Node): node is ESTree.YieldExpression {
+        return node.type === NodeType.YieldExpression;
     }
 }
