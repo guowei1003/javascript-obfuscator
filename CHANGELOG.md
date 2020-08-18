@@ -1,5 +1,86 @@
 Change Log
 
+v1.10.2
+---
+* Fixed obfuscation of literals of `ExportNamedDeclaration` and `ExportAllDeclaration` nodes
+
+v1.10.1
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/707
+
+v1.10.0
+---
+* **Feature:** Optional chaining support!
+* Added `TaggedTemplateLiteral` obfuscation. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/696
+* Improved `disableConsoleOutput` template. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/691
+
+v1.9.0
+---
+* Improved obfuscation of destructured variables. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/688
+
+v1.8.1
+---
+* Fixed runtime error `Uncaught SyntaxError: yield is a reserved identifier` when `deadCodeInjection` is enabled 
+
+v1.8.0
+---
+* `domainLock` option patterns with leading dot character (`.example.com`) now cover root domains (`example.com`) in addition to all sub-domains (`sub.example.com`). https://github.com/javascript-obfuscator/javascript-obfuscator/issues/640
+
+v1.7.0
+---
+* `simplify` option now affects all block statements. Improved variable declarations merging.
+
+v1.6.0
+---
+* **New option:** `numbersToExpressions` enables numbers conversion to expressions
+
+v1.5.2
+---
+* Prevented mutation of the name sequences of `mangled` identifier name generators
+
+v1.5.1
+---
+* Fixed runtime error when `IfStatement` contains only single `let` or `const` variable declaration when `simlify` option enabled. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/661
+* Fixed wrong `source-map: 'inline'` encoding after `1.3.0`
+
+v1.5.0
+---
+* New `mangled-shuffled` identifier names generator based on `mangled` identifier names generator
+
+v1.4.0
+---
+* **New option:** `simplify` enables additional code obfuscation through simplification
+
+v1.3.0
+---
+* Improvements of `stringArrayEncoding`: `base64` and `rc4`
+* **CLI**: added config file extension validation (it still supports `.js` and `.json` extensions)
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/499
+
+v1.2.2
+---
+* Fixed performance regression of `Initializing` stage after `1.2.0`
+
+v1.2.1
+---
+* Support of old browsers when `selfDefending` is enabled. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/615
+
+v1.2.0
+---
+* Conditional comments will be removed from the code after obfuscation. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/641
+
+v1.1.1
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/638
+
+v1.1.0
+---
+* **New option:** `renameProperties` enables renaming of property names
+
+v1.0.1
+---
+* Fixed .d.ts typings. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/623
+
 v1.0.0
 ---
 * Looks like obfuscator is ready for the first stable release

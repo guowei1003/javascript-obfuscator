@@ -63,23 +63,30 @@ export class JavaScriptObfuscator implements IJavaScriptObfuscator {
      */
     private static readonly nodeTransformersList: NodeTransformer[] = [
         NodeTransformer.BlockStatementControlFlowTransformer,
+        NodeTransformer.BlockStatementSimplifyTransformer,
         NodeTransformer.CommentsTransformer,
         NodeTransformer.CustomCodeHelpersTransformer,
         NodeTransformer.DeadCodeInjectionTransformer,
         NodeTransformer.EvalCallExpressionTransformer,
+        NodeTransformer.ExpressionStatementsMergeTransformer,
         NodeTransformer.FunctionControlFlowTransformer,
+        NodeTransformer.IfStatementSimplifyTransformer,
         NodeTransformer.LabeledStatementTransformer,
         NodeTransformer.LiteralTransformer,
+        NodeTransformer.RenamePropertiesTransformer,
         NodeTransformer.MemberExpressionTransformer,
         NodeTransformer.MetadataTransformer,
         NodeTransformer.MethodDefinitionTransformer,
+        NodeTransformer.NumberToNumericalExpressionTransformer,
         NodeTransformer.ObfuscatingGuardsTransformer,
         NodeTransformer.ObjectExpressionKeysTransformer,
         NodeTransformer.ObjectExpressionTransformer,
+        NodeTransformer.ObjectPatternPropertiesTransformer,
         NodeTransformer.ParentificationTransformer,
         NodeTransformer.ScopeIdentifiersTransformer,
         NodeTransformer.SplitStringTransformer,
         NodeTransformer.TemplateLiteralTransformer,
+        NodeTransformer.VariableDeclarationsMergeTransformer,
         NodeTransformer.VariablePreserveTransformer
     ];
 
@@ -208,8 +215,17 @@ export class JavaScriptObfuscator implements IJavaScriptObfuscator {
             astTree = this.runNodeTransformationStage(astTree, NodeTransformationStage.ControlFlowFlattening);
         }
 
+        if (this.options.renameProperties) {
+            astTree = this.runNodeTransformationStage(astTree, NodeTransformationStage.RenameProperties);
+        }
+
         astTree = this.runNodeTransformationStage(astTree, NodeTransformationStage.Converting);
         astTree = this.runNodeTransformationStage(astTree, NodeTransformationStage.Obfuscating);
+
+        if (this.options.simplify) {
+            astTree = this.runNodeTransformationStage(astTree, NodeTransformationStage.Simplifying);
+        }
+
         astTree = this.runNodeTransformationStage(astTree, NodeTransformationStage.Finalizing);
 
         return astTree;

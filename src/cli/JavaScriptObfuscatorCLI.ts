@@ -221,7 +221,7 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
             )
             .option(
                 '--domain-lock <list> (comma separated, without whitespaces)',
-                'Blocks the execution of the code in domains that do not match the passed RegExp patterns (comma separated)',
+                'Allows to run the obfuscated source code only on specific domains and/or sub-domains (comma separated)',
                 ArraySanitizer
             )
             .option(
@@ -232,13 +232,13 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
             .option(
                 '--identifier-names-generator <string>',
                 'Sets identifier names generator. ' +
-                'Values: hexadecimal, mangled, dictionary. ' +
+                'Values: hexadecimal, mangled, mangled-shuffled, dictionary. ' +
                 'Default: hexadecimal',
                 IdentifierNamesGeneratorSanitizer
             )
             .option(
                 '--identifiers-prefix <string>',
-                'Sets prefix for all global identifiers.'
+                'Sets prefix for all global identifiers'
             )
             .option(
                 '--identifiers-dictionary <list> (comma separated, without whitespaces)',
@@ -247,6 +247,10 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
             )
             .option(
                 '--log <boolean>', 'Enables logging of the information to the console',
+                BooleanSanitizer
+            )
+            .option(
+                '--numbers-to-expressions <boolean>', 'Enables numbers conversion to expressions',
                 BooleanSanitizer
             )
             .option(
@@ -260,7 +264,11 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
                 ArraySanitizer
             )
             .option(
-                '--rename-globals <boolean>', 'Allows to enable obfuscation of global variable and function names with declaration.',
+                '--rename-globals <boolean>', 'Allows to enable obfuscation of global variable and function names with declaration',
+                BooleanSanitizer
+            )
+            .option(
+                '--rename-properties <boolean>', 'UNSAFE: Enables renaming of property names. This probably WILL break your code',
                 BooleanSanitizer
             )
             .option(
@@ -279,6 +287,10 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
             )
             .option(
                 '--shuffle-string-array <boolean>', 'Randomly shuffles string array items',
+                BooleanSanitizer
+            )
+            .option(
+                '--simplify <boolean>', 'Enables additional code obfuscation through simplification',
                 BooleanSanitizer
             )
             .option(

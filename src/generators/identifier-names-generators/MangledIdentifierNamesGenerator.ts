@@ -6,6 +6,10 @@ import { TNodeWithLexicalScope } from '../../types/node/TNodeWithLexicalScope';
 import { IOptions } from '../../interfaces/options/IOptions';
 import { IRandomGenerator } from '../../interfaces/utils/IRandomGenerator';
 
+import { numbersString } from '../../constants/NumbersString';
+import { alphabetString } from '../../constants/AlphabetString';
+import { alphabetStringUppercase } from '../../constants/AlphabetStringUppercase';
+
 import { AbstractIdentifierNamesGenerator } from './AbstractIdentifierNamesGenerator';
 import { NodeLexicalScopeUtils } from '../../node/NodeLexicalScopeUtils';
 
@@ -24,7 +28,9 @@ export class MangledIdentifierNamesGenerator extends AbstractIdentifierNamesGene
     /**
      * @type {string[]}
      */
-    private static readonly nameSequence: string[] = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    private static readonly nameSequence: string[] = [
+        ...`${numbersString}${alphabetString}${alphabetStringUppercase}`
+    ];
 
     /**
      * Reserved JS words with length of 2-4 symbols that can be possible generated with this replacer
@@ -125,12 +131,19 @@ export class MangledIdentifierNamesGenerator extends AbstractIdentifierNamesGene
     }
 
     /**
+     * @returns {string[]}
+     */
+    protected getNameSequence (): string[] {
+        return MangledIdentifierNamesGenerator.nameSequence;
+    }
+
+    /**
      * @param {string} previousMangledName
      * @returns {string}
      */
-    private generateNewMangledName (previousMangledName: string): string {
+    protected generateNewMangledName (previousMangledName: string): string {
         const generateNewMangledName: (name: string) => string = (name: string): string => {
-            const nameSequence: string[] = MangledIdentifierNamesGenerator.nameSequence;
+            const nameSequence: string[] = this.getNameSequence();
             const nameSequenceLength: number = nameSequence.length;
             const nameLength: number = name.length;
 
@@ -157,7 +170,9 @@ export class MangledIdentifierNamesGenerator extends AbstractIdentifierNamesGene
                 --index;
             } while (index >= 0);
 
-            return `a${zeroSequence(nameLength)}`;
+            const firstLetterCharacter: string = nameSequence[numbersString.length];
+
+            return `${firstLetterCharacter}${zeroSequence(nameLength)}`;
         };
 
         let newMangledName: string = generateNewMangledName(previousMangledName);
