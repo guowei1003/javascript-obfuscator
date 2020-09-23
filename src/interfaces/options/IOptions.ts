@@ -1,6 +1,8 @@
 import { TypeFromEnum } from '@gradecam/tsenum';
 
+import { TOptionsPreset } from '../../types/options/TOptionsPreset';
 import { TStringArrayEncoding } from '../../types/options/TStringArrayEncoding';
+import { TStringArrayWrappersType } from '../../types/options/TStringArrayWrappersType';
 
 import { IdentifierNamesGenerator } from '../../enums/generators/identifier-names-generators/IdentifierNamesGenerator';
 import { ObfuscationTarget } from '../../enums/ObfuscationTarget';
@@ -22,6 +24,7 @@ export interface IOptions {
     readonly inputFileName: string;
     readonly log: boolean;
     readonly numbersToExpressions: boolean;
+    readonly optionsPreset: TOptionsPreset;
     readonly renameGlobals: boolean;
     readonly renameProperties: boolean;
     readonly reservedNames: string[];
@@ -38,7 +41,10 @@ export interface IOptions {
     readonly splitStrings: boolean;
     readonly splitStringsChunkLength: number;
     readonly stringArray: boolean;
-    readonly stringArrayEncoding: TStringArrayEncoding;
+    readonly stringArrayEncoding: TStringArrayEncoding[];
+    readonly stringArrayWrappersChainedCalls: boolean;
+    readonly stringArrayWrappersCount: number;
+    readonly stringArrayWrappersType: TStringArrayWrappersType;
     readonly stringArrayThreshold: number;
     readonly target: TypeFromEnum<typeof ObfuscationTarget>;
     readonly transformObjectKeys: boolean;

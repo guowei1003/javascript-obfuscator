@@ -1,19 +1,23 @@
 import { assert } from 'chai';
 import { TypeFromEnum } from '@gradecam/tsenum';
 
-import { TInputOptions } from '../../../src/types/options/TInputOptions';
 import { TDictionary } from '../../../src/types/TDictionary';
+import { TInputOptions } from '../../../src/types/options/TInputOptions';
+import { TOptionsPreset } from '../../../src/types/options/TOptionsPreset';
 
 import { IObfuscatedCode } from '../../../src/interfaces/source-code/IObfuscatedCode';
 
 import { SourceMapMode } from '../../../src/enums/source-map/SourceMapMode';
-import { StringArrayEncoding } from '../../../src/enums/StringArrayEncoding';
+import { StringArrayEncoding } from '../../../src/enums/node-transformers/string-array-transformers/StringArrayEncoding';
+import { StringArrayWrappersType } from '../../../src/enums/node-transformers/string-array-transformers/StringArrayWrappersType';
 
 import { JavaScriptObfuscator } from '../../../src/JavaScriptObfuscatorFacade';
 
+import { HIGH_OBFUSCATION_PRESET } from '../../../src/options/presets/HighObfuscation';
 import { NO_ADDITIONAL_NODES_PRESET } from '../../../src/options/presets/NoCustomNodes';
 
 import { IdentifierNamesGenerator } from '../../../src/enums/generators/identifier-names-generators/IdentifierNamesGenerator';
+import { OptionsPreset } from '../../../src/enums/options/presets/OptionsPreset';
 
 import { buildLargeCode } from '../../helpers/buildLargeCode';
 import { getRegExpMatch } from '../../helpers/getRegExpMatch';
@@ -719,7 +723,10 @@ describe('JavaScriptObfuscator', () => {
                 obfuscatedCode = JavaScriptObfuscator.obfuscate(
                     code,
                     {
-                        identifierNamesGenerator: IdentifierNamesGenerator.MangledIdentifierNamesGenerator
+                        ...NO_ADDITIONAL_NODES_PRESET,
+                        identifierNamesGenerator: IdentifierNamesGenerator.MangledIdentifierNamesGenerator,
+                        stringArray: true,
+                        stringArrayThreshold: 1
                     }
                 ).getObfuscatedCode();
             });
@@ -841,7 +848,13 @@ describe('JavaScriptObfuscator', () => {
                         renameProperties: true,
                         rotateStringArray: true,
                         stringArray: true,
-                        stringArrayEncoding: StringArrayEncoding.Rc4,
+                        stringArrayEncoding: [
+                            StringArrayEncoding.Base64,
+                            StringArrayEncoding.Rc4
+                        ],
+                        stringArrayWrappersChainedCalls: true,
+                        stringArrayWrappersCount: 10,
+                        stringArrayWrappersType: StringArrayWrappersType.Function,
                         stringArrayThreshold: 1,
                         transformObjectKeys: true,
                         unicodeEscapeSequence: false
@@ -853,6 +866,52 @@ describe('JavaScriptObfuscator', () => {
 
             it('should correctly obfuscate 3.5k variables', () => {
                 assert.equal(result, expectedValue);
+            });
+        });
+
+        describe('Eval `Hello World`', function () {
+            this.timeout(20000);
+
+            const samplesCount: number = 100;
+            const expectedEvaluationResult: string = 'Hello World';
+            let isEvaluationSuccessful: boolean = true;
+
+            before(() => {
+                const code: string = readFileAsString(__dirname + '/fixtures/eval-hello-world.js');
+
+                for (let i = 0; i < samplesCount; i++) {
+                    const obfuscatedCode: string = JavaScriptObfuscator.obfuscate(
+                        code,
+                        {
+                            ...NO_ADDITIONAL_NODES_PRESET,
+                            compact: false,
+                            controlFlowFlattening: true,
+                            controlFlowFlatteningThreshold: 1,
+                            deadCodeInjection: true,
+                            deadCodeInjectionThreshold: 1,
+                            disableConsoleOutput: true,
+                            identifierNamesGenerator: IdentifierNamesGenerator.MangledIdentifierNamesGenerator,
+                            renameProperties: true,
+                            simplify: false,
+                            stringArray: true,
+                            stringArrayThreshold: 1,
+                            stringArrayWrappersChainedCalls: true,
+                            stringArrayWrappersCount: 1,
+                            stringArrayWrappersType: StringArrayWrappersType.Variable
+                        }
+                    ).getObfuscatedCode();
+
+                    const evaluationResult: string = eval(obfuscatedCode);
+
+                    if (evaluationResult !== expectedEvaluationResult) {
+                        isEvaluationSuccessful = false;
+                        break;
+                    }
+                }
+            });
+
+            it('should correctly evaluate obfuscated code', () => {
+                assert.equal(isEvaluationSuccessful, true);
             });
         });
 
@@ -932,10 +991,9 @@ describe('JavaScriptObfuscator', () => {
                         {
                             ...NO_ADDITIONAL_NODES_PRESET,
                             ...baseParams,
-                            stringArrayEncoding: StringArrayEncoding.Rc4
+                            stringArrayEncoding: [StringArrayEncoding.Rc4]
                         }
                     ).getObfuscatedCode();
-
                 });
 
                 it('does not break on run', () => {
@@ -955,7 +1013,7 @@ describe('JavaScriptObfuscator', () => {
                             {
                                 ...NO_ADDITIONAL_NODES_PRESET,
                                 ...baseParams,
-                                stringArrayEncoding: StringArrayEncoding.Rc4
+                                stringArrayEncoding: [StringArrayEncoding.Rc4]
                             }
                         ).getObfuscatedCode();
 
@@ -977,7 +1035,7 @@ describe('JavaScriptObfuscator', () => {
                             {
                                 ...NO_ADDITIONAL_NODES_PRESET,
                                 ...baseParams,
-                                stringArrayEncoding: StringArrayEncoding.Rc4
+                                stringArrayEncoding: [StringArrayEncoding.Rc4]
                             }
                         ).getObfuscatedCode();
                     });
@@ -1000,7 +1058,7 @@ describe('JavaScriptObfuscator', () => {
                             {
                                 ...NO_ADDITIONAL_NODES_PRESET,
                                 ...baseParams,
-                                stringArrayEncoding: StringArrayEncoding.Rc4
+                                stringArrayEncoding: [StringArrayEncoding.Rc4]
                             }
                         ).getObfuscatedCode();
 
@@ -1022,7 +1080,7 @@ describe('JavaScriptObfuscator', () => {
                             {
                                 ...NO_ADDITIONAL_NODES_PRESET,
                                 ...baseParams,
-                                stringArrayEncoding: StringArrayEncoding.Base64
+                                stringArrayEncoding: [StringArrayEncoding.Base64]
                             }
                         ).getObfuscatedCode();
 
@@ -1086,6 +1144,36 @@ describe('JavaScriptObfuscator', () => {
 
             it('Should throw an error if source codes object is not a plain object', () => {
                 assert.throw(testFunc, Error);
+            });
+        });
+    });
+
+    describe('getOptionsByPreset', () => {
+        describe('Variant #1: base behaviour', () => {
+            const optionsPresetName: TOptionsPreset = OptionsPreset.HighObfuscation;
+
+            let options: TInputOptions;
+
+            before(() => {
+                options = JavaScriptObfuscator.getOptionsByPreset(optionsPresetName);
+            });
+
+            it('Should return options for passed options preset name', () => {
+                assert.deepEqual(options, HIGH_OBFUSCATION_PRESET);
+            });
+        });
+
+        describe('Variant #2: unknown options preset name', () => {
+            const optionsPresetName: TOptionsPreset = 'foobar' as TOptionsPreset;
+
+            let testFunc: () => TInputOptions;
+
+            before(() => {
+                testFunc = () => JavaScriptObfuscator.getOptionsByPreset(optionsPresetName);
+            });
+
+            it('Should throws an error when unknown option preset is passed', () => {
+                assert.throws(testFunc, 'Options for preset name `foobar` are not found');
             });
         });
     });

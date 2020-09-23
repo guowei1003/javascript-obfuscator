@@ -7,17 +7,19 @@ import { controlFlowTransformersModule } from './modules/node-transformers/Contr
 import { convertingTransformersModule } from './modules/node-transformers/ConvertingTransformersModule';
 import { customCodeHelpersModule } from './modules/custom-code-helpers/CustomCodeHelpersModule';
 import { customNodesModule } from './modules/custom-nodes/CustomNodesModule';
+import { deadCodeInjectionTransformersModule } from './modules/node-transformers/DeadCodeInjectionTransformersModule';
 import { finalizingTransformersModule } from './modules/node-transformers/FinalizingTransformersModule';
 import { generatorsModule } from './modules/generators/GeneratorsModule';
 import { initializingTransformersModule } from './modules/node-transformers/InitializingTransformersModule';
 import { nodeModule } from './modules/node/NodeModule';
 import { nodeTransformersModule } from './modules/node-transformers/NodeTransformersModule';
-import { obfuscatingTransformersModule } from './modules/node-transformers/ObfuscatingTransformersModule';
 import { optionsModule } from './modules/options/OptionsModule';
 import { preparingTransformersModule } from './modules/node-transformers/PreparingTransformersModule';
+import { renameIdentifiersTransformersModule } from './modules/node-transformers/RenameIdentifiersTransformersModule';
 import { renamePropertiesTransformersModule } from './modules/node-transformers/RenamePropertiesTransformersModule';
 import { simplifyingTransformersModule } from './modules/node-transformers/SimplifyingTransformersModule';
 import { storagesModule } from './modules/storages/StoragesModule';
+import { stringArrayTransformersModule } from './modules/node-transformers/StringArrayTransformersModule';
 import { utilsModule } from './modules/utils/UtilsModule';
 
 import { TInputOptions } from '../types/options/TInputOptions';
@@ -209,17 +211,19 @@ export class InversifyContainerFacade implements IInversifyContainerFacade {
         this.container.load(convertingTransformersModule);
         this.container.load(customCodeHelpersModule);
         this.container.load(customNodesModule);
+        this.container.load(deadCodeInjectionTransformersModule);
         this.container.load(finalizingTransformersModule);
         this.container.load(generatorsModule);
         this.container.load(initializingTransformersModule);
         this.container.load(nodeModule);
         this.container.load(nodeTransformersModule);
-        this.container.load(obfuscatingTransformersModule);
         this.container.load(optionsModule);
         this.container.load(preparingTransformersModule);
+        this.container.load(renameIdentifiersTransformersModule);
         this.container.load(renamePropertiesTransformersModule);
         this.container.load(simplifyingTransformersModule);
         this.container.load(storagesModule);
+        this.container.load(stringArrayTransformersModule);
         this.container.load(utilsModule);
     }
 

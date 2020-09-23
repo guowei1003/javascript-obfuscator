@@ -2,7 +2,10 @@ import { TInputOptions } from '../../types/options/TInputOptions';
 
 import { IdentifierNamesGenerator } from '../../enums/generators/identifier-names-generators/IdentifierNamesGenerator';
 import { ObfuscationTarget } from '../../enums/ObfuscationTarget';
+import { OptionsPreset } from '../../enums/options/presets/OptionsPreset';
 import { SourceMapMode } from '../../enums/source-map/SourceMapMode';
+import { StringArrayEncoding } from '../../enums/node-transformers/string-array-transformers/StringArrayEncoding';
+import { StringArrayWrappersType } from '../../enums/node-transformers/string-array-transformers/StringArrayWrappersType';
 
 export const DEFAULT_PRESET: TInputOptions = Object.freeze({
     compact: true,
@@ -22,6 +25,7 @@ export const DEFAULT_PRESET: TInputOptions = Object.freeze({
     inputFileName: '',
     log: false,
     numbersToExpressions: false,
+    optionsPreset: OptionsPreset.Default,
     renameGlobals: false,
     renameProperties: false,
     reservedNames: [],
@@ -38,7 +42,12 @@ export const DEFAULT_PRESET: TInputOptions = Object.freeze({
     splitStrings: false,
     splitStringsChunkLength: 10,
     stringArray: true,
-    stringArrayEncoding: false,
+    stringArrayEncoding: [
+        StringArrayEncoding.None
+    ],
+    stringArrayWrappersChainedCalls: true,
+    stringArrayWrappersCount: 1,
+    stringArrayWrappersType: StringArrayWrappersType.Variable,
     stringArrayThreshold: 0.75,
     target: ObfuscationTarget.Browser,
     transformObjectKeys: false,

@@ -2,10 +2,9 @@ import { inject, injectable, } from 'inversify';
 import * as ESTree from 'estree';
 import * as eslintScope from 'eslint-scope';
 
-import { TIdentifierObfuscatingReplacerFactory } from '../../types/container/node-transformers/TIdentifierObfuscatingReplacerFactory';
 import { TNodeWithLexicalScope } from '../../types/node/TNodeWithLexicalScope';
 
-import { IIdentifierObfuscatingReplacer } from '../../interfaces/node-transformers/obfuscating-transformers/obfuscating-replacers/IIdentifierObfuscatingReplacer';
+import { IIdentifierReplacer } from '../../interfaces/node-transformers/rename-identifiers-transformers/replacer/IIdentifierReplacer';
 import { IOptions } from '../../interfaces/options/IOptions';
 import { IRandomGenerator } from '../../interfaces/utils/IRandomGenerator';
 import { IScopeIdentifiersTraverser } from '../../interfaces/node/IScopeIdentifiersTraverser';
@@ -17,7 +16,6 @@ import { ServiceIdentifiers } from '../../container/ServiceIdentifiers';
 import { NodeTransformationStage } from '../../enums/node-transformers/NodeTransformationStage';
 
 import { AbstractNodeTransformer } from '../AbstractNodeTransformer';
-import { IdentifierObfuscatingReplacer } from '../../enums/node-transformers/obfuscating-transformers/obfuscating-replacers/IdentifierObfuscatingReplacer';
 import { NodeGuards } from '../../node/NodeGuards';
 
 /**
@@ -33,9 +31,9 @@ export class VariablePreserveTransformer extends AbstractNodeTransformer {
     ];
 
     /**
-     * @type {IIdentifierObfuscatingReplacer}
+     * @type {IIdentifierReplacer}
      */
-    private readonly identifierObfuscatingReplacer: IIdentifierObfuscatingReplacer;
+    private readonly identifierReplacer: IIdentifierReplacer;
 
     /**
      * @type {IScopeIdentifiersTraverser}
@@ -43,23 +41,20 @@ export class VariablePreserveTransformer extends AbstractNodeTransformer {
     private readonly scopeIdentifiersTraverser: IScopeIdentifiersTraverser;
 
     /**
-     * @param {TIdentifierObfuscatingReplacerFactory} identifierObfuscatingReplacerFactory
+     * @param {IIdentifierReplacer} identifierReplacer
      * @param {IRandomGenerator} randomGenerator
      * @param {IOptions} options
      * @param {IScopeIdentifiersTraverser} scopeIdentifiersTraverser
      */
     public constructor (
-        @inject(ServiceIdentifiers.Factory__IIdentifierObfuscatingReplacer)
-            identifierObfuscatingReplacerFactory: TIdentifierObfuscatingReplacerFactory,
+        @inject(ServiceIdentifiers.IIdentifierReplacer) identifierReplacer: IIdentifierReplacer,
         @inject(ServiceIdentifiers.IRandomGenerator) randomGenerator: IRandomGenerator,
         @inject(ServiceIdentifiers.IOptions) options: IOptions,
         @inject(ServiceIdentifiers.IScopeIdentifiersTraverser) scopeIdentifiersTraverser: IScopeIdentifiersTraverser
     ) {
         super(randomGenerator, options);
 
-        this.identifierObfuscatingReplacer = identifierObfuscatingReplacerFactory(
-            IdentifierObfuscatingReplacer.BaseIdentifierObfuscatingReplacer
-        );
+        this.identifierReplacer = identifierReplacer;
         this.scopeIdentifiersTraverser = scopeIdentifiersTraverser;
 
         this.preserveScopeVariableIdentifiers = this.preserveScopeVariableIdentifiers.bind(this);
@@ -73,7 +68,7 @@ export class VariablePreserveTransformer extends AbstractNodeTransformer {
         switch (nodeTransformationStage) {
             case NodeTransformationStage.Preparing:
             case NodeTransformationStage.Converting:
-            case NodeTransformationStage.Obfuscating:
+            case NodeTransformationStage.RenameIdentifiers:
                 return {
                     enter: (node: ESTree.Node, parentNode: ESTree.Node | null): ESTree.Node | undefined => {
                         if (parentNode && NodeGuards.isProgramNode(node)) {
@@ -93,7 +88,7 @@ export class VariablePreserveTransformer extends AbstractNodeTransformer {
      * @returns {NodeGuards}
      */
     public transformNode (programNode: ESTree.Program, parentNode: ESTree.Node): ESTree.Node {
-        this.scopeIdentifiersTraverser.traverse(
+        this.scopeIdentifiersTraverser.traverseScopeIdentifiers(
             programNode,
             parentNode,
             this.preserveScopeVariableIdentifiers
@@ -126,7 +121,7 @@ export class VariablePreserveTransformer extends AbstractNodeTransformer {
      * @param {Identifier} identifierNode
      */
     private preserveIdentifierNameForRootLexicalScope (identifierNode: ESTree.Identifier): void {
-        this.identifierObfuscatingReplacer.preserveName(identifierNode);
+        this.identifierReplacer.preserveName(identifierNode);
     }
 
     /**
@@ -145,6 +140,6 @@ export class VariablePreserveTransformer extends AbstractNodeTransformer {
             return;
         }
 
-        this.identifierObfuscatingReplacer.preserveNameForLexicalScope(identifierNode, lexicalScopeNode);
+        this.identifierReplacer.preserveNameForLexicalScope(identifierNode, lexicalScopeNode);
     }
 }

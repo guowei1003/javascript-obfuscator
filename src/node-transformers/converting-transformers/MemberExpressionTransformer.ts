@@ -56,7 +56,7 @@ export class MemberExpressionTransformer extends AbstractNodeTransformer {
      * and skip:
      *     object[identifier] = 1;
      *
-     * Literal node will be obfuscated by LiteralTransformer
+     * Literal node will be obfuscated by StringArrayTransformer
      *
      * @param {MemberExpression} memberExpressionNode
      * @param {NodeGuards} parentNode
