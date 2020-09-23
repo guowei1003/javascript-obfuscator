@@ -9,7 +9,9 @@ import { TInputOptions } from '../../../../src/types/options/TInputOptions';
 
 import { IInversifyContainerFacade } from '../../../../src/interfaces/container/IInversifyContainerFacade';
 import { IStringArrayStorageAnalyzer } from '../../../../src/interfaces/analyzers/string-array-storage-analyzer/IStringArrayStorageAnalyzer';
-import { IStringArrayStorageItemData } from '../../../../src/interfaces/storages/string-array-storage/IStringArrayStorageItem';
+import { IStringArrayStorageItemData } from '../../../../src/interfaces/storages/string-array-transformers/IStringArrayStorageItem';
+
+import { StringArrayEncoding } from '../../../../src/enums/node-transformers/string-array-transformers/StringArrayEncoding';
 
 import { InversifyContainerFacade } from '../../../../src/container/InversifyContainerFacade';
 import { NodeFactory } from '../../../../src/node/NodeFactory';
@@ -34,12 +36,14 @@ describe('StringArrayStorageAnalyzer', () => {
 
             const expectedStringArrayStorageItemData1: IStringArrayStorageItemData = {
                 encodedValue: 'foo',
+                encoding: StringArrayEncoding.None,
                 decodeKey: null,
                 index: 0,
                 value: 'foo'
             };
             const expectedStringArrayStorageItemData2: IStringArrayStorageItemData = {
                 encodedValue: 'bar',
+                encoding: StringArrayEncoding.None,
                 decodeKey: null,
                 index: 1,
                 value: 'bar'
@@ -85,6 +89,7 @@ describe('StringArrayStorageAnalyzer', () => {
 
             const expectedStringArrayStorageItemData1: IStringArrayStorageItemData = {
                 encodedValue: 'foo',
+                encoding: StringArrayEncoding.None,
                 decodeKey: null,
                 index: 0,
                 value: 'foo'
@@ -124,6 +129,7 @@ describe('StringArrayStorageAnalyzer', () => {
 
             const expectedStringArrayStorageItemData1: IStringArrayStorageItemData = {
                 encodedValue: 'foo',
+                encoding: StringArrayEncoding.None,
                 decodeKey: null,
                 index: 0,
                 value: 'foo'
@@ -163,6 +169,7 @@ describe('StringArrayStorageAnalyzer', () => {
 
             const expectedStringArrayStorageItemData1: IStringArrayStorageItemData = {
                 encodedValue: 'foo',
+                encoding: StringArrayEncoding.None,
                 decodeKey: null,
                 index: 0,
                 value: 'foo'
@@ -213,6 +220,7 @@ describe('StringArrayStorageAnalyzer', () => {
 
             const expectedStringArrayStorageItemData1: IStringArrayStorageItemData = {
                 encodedValue: 'foo',
+                encoding: StringArrayEncoding.None,
                 decodeKey: null,
                 index: 0,
                 value: 'foo'
@@ -330,6 +338,7 @@ describe('StringArrayStorageAnalyzer', () => {
                 const expectedStringArrayStorageItemData1: undefined = undefined;
                 const expectedStringArrayStorageItemData2: IStringArrayStorageItemData = {
                     encodedValue: 'bar',
+                    encoding: StringArrayEncoding.None,
                     decodeKey: null,
                     index: 0,
                     value: 'bar'

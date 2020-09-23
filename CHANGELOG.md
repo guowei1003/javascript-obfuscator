@@ -1,5 +1,44 @@
 Change Log
 
+v2.3.1
+---
+* Fixed a rare bug with `identifierNamesGenerator: 'mangled'` option that causes wrong identifier names generation
+
+v2.3.0
+---
+* **New option:** `stringArrayWrappersType` allows to select a type of the wrappers that are appending by the `stringArrayWrappersCount` option
+* Add force convert of unicode control characters to the unicode escape sequence. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/747
+
+v2.2.1
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/745
+
+v2.2.0
+---
+* **New option (enabled by default):** `stringArrayWrappersCount` sets the count of wrappers for the `string array` inside each root or function scope
+* **New option (enabled by default):** `stringArrayWrappersChainedCalls` enables the chained calls between `string array` wrappers
+
+v2.1.0
+---
+* **New API:** `getOptionsByPreset` allows to get options for the passed options preset name 
+
+v2.0.0
+---
+* **Breaking change:** `stringArrayEncoding` option now accepts an array of encodings. Each string will be randomly encoded with passed encoding
+
+v1.12.1
+---
+* Fixed regression bug with combination of `splitStrings` and `renameProperties` option. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/729
+
+v1.12.0
+---
+* **New option:** `optionsPreset` allows to set options preset
+
+v1.11.0
+---
+* Improved rename of `deadCodeInjection` dead code identifiers. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/708
+* **Reverted** `TaggedTemplateLiteral` obfuscation. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/716
+
 v1.10.2
 ---
 * Fixed obfuscation of literals of `ExportNamedDeclaration` and `ExportAllDeclaration` nodes

@@ -10,7 +10,7 @@ import { IInversifyContainerFacade } from '../../../src/interfaces/container/IIn
 import { IOptions } from '../../../src/interfaces/options/IOptions';
 import { IOptionsNormalizer } from '../../../src/interfaces/options/IOptionsNormalizer';
 
-import { StringArrayEncoding } from '../../../src/enums/StringArrayEncoding';
+import { StringArrayEncoding } from '../../../src/enums/node-transformers/string-array-transformers/StringArrayEncoding';
 
 import { DEFAULT_PRESET } from '../../../src/options/presets/Default';
 
@@ -543,7 +543,9 @@ describe('OptionsNormalizer', () => {
                     ...getDefaultOptions(),
                     shuffleStringArray: true,
                     stringArray: false,
-                    stringArrayEncoding: StringArrayEncoding.Rc4,
+                    stringArrayEncoding: [StringArrayEncoding.Rc4],
+                    stringArrayWrappersChainedCalls: true,
+                    stringArrayWrappersCount: 5,
                     stringArrayThreshold: 0.5,
                     rotateStringArray: true
                 });
@@ -552,7 +554,9 @@ describe('OptionsNormalizer', () => {
                     ...getDefaultOptions(),
                     shuffleStringArray: false,
                     stringArray: false,
-                    stringArrayEncoding: false,
+                    stringArrayEncoding: [StringArrayEncoding.None],
+                    stringArrayWrappersChainedCalls: false,
+                    stringArrayWrappersCount: 0,
                     stringArrayThreshold: 0,
                     rotateStringArray: false
                 };
@@ -567,12 +571,14 @@ describe('OptionsNormalizer', () => {
             before(() => {
                 optionsPreset = getNormalizedOptions({
                     ...getDefaultOptions(),
-                    stringArrayEncoding: true
+                    stringArrayEncoding: []
                 });
 
                 expectedOptionsPreset = {
                     ...getDefaultOptions(),
-                    stringArrayEncoding: StringArrayEncoding.Base64
+                    stringArrayEncoding: [
+                        StringArrayEncoding.None
+                    ]
                 };
             });
 
@@ -588,6 +594,8 @@ describe('OptionsNormalizer', () => {
                     rotateStringArray: true,
                     shuffleStringArray: true,
                     stringArray: true,
+                    stringArrayWrappersChainedCalls: true,
+                    stringArrayWrappersCount: 5,
                     stringArrayThreshold: 0
                 });
 
@@ -596,7 +604,29 @@ describe('OptionsNormalizer', () => {
                     rotateStringArray: false,
                     shuffleStringArray: false,
                     stringArray: false,
+                    stringArrayWrappersChainedCalls: false,
+                    stringArrayWrappersCount: 0,
                     stringArrayThreshold: 0
+                };
+            });
+
+            it('should normalize options preset', () => {
+                assert.deepEqual(optionsPreset, expectedOptionsPreset);
+            });
+        });
+
+        describe('stringArrayWrappersChainedCallsRule', () => {
+            before(() => {
+                optionsPreset = getNormalizedOptions({
+                    ...getDefaultOptions(),
+                    stringArrayWrappersChainedCalls: true,
+                    stringArrayWrappersCount: 0
+                });
+
+                expectedOptionsPreset = {
+                    ...getDefaultOptions(),
+                    stringArrayWrappersChainedCalls: false,
+                    stringArrayWrappersCount: 0
                 };
             });
 

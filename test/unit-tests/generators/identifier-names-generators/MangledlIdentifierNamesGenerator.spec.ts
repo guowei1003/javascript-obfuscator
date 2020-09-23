@@ -10,6 +10,7 @@ import { IInversifyContainerFacade } from '../../../../src/interfaces/container/
 import { IdentifierNamesGenerator } from '../../../../src/enums/generators/identifier-names-generators/IdentifierNamesGenerator';
 
 import { InversifyContainerFacade } from '../../../../src/container/InversifyContainerFacade';
+import { MangledIdentifierNamesGenerator } from '../../../../src/generators/identifier-names-generators/MangledIdentifierNamesGenerator';
 
 describe('MangledIdentifierNamesGenerator', () => {
     describe('generateNext', () => {
@@ -170,7 +171,43 @@ describe('MangledIdentifierNamesGenerator', () => {
         });
     });
 
-    describe('isValidIdentifierName (identifierName: string): boolean', () => {
+    describe('isIncrementedMangledName', function () {
+        this.timeout(60000);
+
+        const inversifyContainerFacade: IInversifyContainerFacade = new InversifyContainerFacade();
+
+        inversifyContainerFacade.load('', '', {});
+        const identifierNamesGenerator: IIdentifierNamesGenerator = inversifyContainerFacade.getNamed<IIdentifierNamesGenerator>(
+            ServiceIdentifiers.IIdentifierNamesGenerator,
+            IdentifierNamesGenerator.MangledIdentifierNamesGenerator
+        );
+
+        let mangledName: string = '';
+        let prevMangledName: string = '9';
+
+        for (let sample = 0; sample <= 10000; sample++) {
+            describe(`Variant #${sample + 1}`, () => {
+                let resultNormal: boolean;
+                let resultReversed: boolean;
+
+                mangledName = identifierNamesGenerator.generateNext();
+                resultNormal = MangledIdentifierNamesGenerator.isIncrementedMangledName(mangledName, prevMangledName);
+                resultReversed = MangledIdentifierNamesGenerator.isIncrementedMangledName(prevMangledName, mangledName);
+
+                it(`Variant #1: should compare mangled names: ${mangledName}, ${prevMangledName}`, () => {
+                    assert.isTrue(resultNormal);
+                });
+
+                it(`Variant #2: should compare mangled names: ${prevMangledName}, ${mangledName}`, () => {
+                    assert.isFalse(resultReversed);
+                });
+
+                prevMangledName = mangledName;
+            });
+        }
+    });
+
+    describe('isValidIdentifierName', () => {
         describe('Variant #1: reserved name as simple string', () => {
             const expectedFirstIdentifier: string = 'a';
             const expectedSecondIdentifier: string = 'd';

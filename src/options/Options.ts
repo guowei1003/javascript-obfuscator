@@ -21,23 +21,40 @@ import {
 } from 'class-validator';
 
 import { TInputOptions } from '../types/options/TInputOptions';
+import { TOptionsPreset } from '../types/options/TOptionsPreset';
 import { TStringArrayEncoding } from '../types/options/TStringArrayEncoding';
+import { TStringArrayWrappersType } from '../types/options/TStringArrayWrappersType';
 
 import { IOptions } from '../interfaces/options/IOptions';
 import { IOptionsNormalizer } from '../interfaces/options/IOptionsNormalizer';
 
 import { IdentifierNamesGenerator } from '../enums/generators/identifier-names-generators/IdentifierNamesGenerator';
 import { ObfuscationTarget } from '../enums/ObfuscationTarget';
+import { OptionsPreset } from '../enums/options/presets/OptionsPreset';
 import { SourceMapMode } from '../enums/source-map/SourceMapMode';
-import { StringArrayEncoding } from '../enums/StringArrayEncoding';
+import { StringArrayEncoding } from '../enums/node-transformers/string-array-transformers/StringArrayEncoding';
+import { StringArrayWrappersType } from '../enums/node-transformers/string-array-transformers/StringArrayWrappersType';
 
 import { DEFAULT_PRESET } from './presets/Default';
+import { LOW_OBFUSCATION_PRESET } from './presets/LowObfuscation';
+import { MEDIUM_OBFUSCATION_PRESET } from './presets/MediumObfuscation';
+import { HIGH_OBFUSCATION_PRESET } from './presets/HighObfuscation';
 
 import { ValidationErrorsFormatter } from './ValidationErrorsFormatter';
 import { IsAllowedForObfuscationTargets } from './validators/IsAllowedForObfuscationTargets';
 
 @injectable()
 export class Options implements IOptions {
+    /**
+     * @type {Map<TOptionsPreset, TInputOptions>}
+     */
+    private static readonly optionPresetsMap: Map<TOptionsPreset, TInputOptions> = new Map([
+        [OptionsPreset.Default, DEFAULT_PRESET],
+        [OptionsPreset.LowObfuscation, LOW_OBFUSCATION_PRESET],
+        [OptionsPreset.MediumObfuscation, MEDIUM_OBFUSCATION_PRESET],
+        [OptionsPreset.HighObfuscation, HIGH_OBFUSCATION_PRESET]
+    ]);
+
     /**
      * @type {ValidatorOptions}
      */
@@ -158,6 +175,17 @@ export class Options implements IOptions {
     public readonly numbersToExpressions!: boolean;
 
     /**
+     * @type {TOptionsPreset}
+     */
+    @IsIn([
+        OptionsPreset.Default,
+        OptionsPreset.LowObfuscation,
+        OptionsPreset.MediumObfuscation,
+        OptionsPreset.HighObfuscation
+    ])
+    public readonly optionsPreset!: TOptionsPreset;
+
+    /**
      * @type {boolean}
      */
     @IsBoolean()
@@ -264,10 +292,31 @@ export class Options implements IOptions {
     public readonly stringArray!: boolean;
 
     /**
-     * @type {TStringArrayEncoding}
+     * @type {TStringArrayEncoding[]}
      */
-    @IsIn([true, false, StringArrayEncoding.Base64, StringArrayEncoding.Rc4])
-    public readonly stringArrayEncoding!: TStringArrayEncoding;
+    @IsArray()
+    @ArrayUnique()
+    @IsIn([StringArrayEncoding.None, StringArrayEncoding.Base64, StringArrayEncoding.Rc4], { each: true })
+    public readonly stringArrayEncoding!: TStringArrayEncoding[];
+
+    /**
+     * @type {boolean}
+     */
+    @IsBoolean()
+    public readonly stringArrayWrappersChainedCalls!: boolean;
+
+    /**
+     * @type {boolean}
+     */
+    @IsNumber()
+    @Min(0)
+    public readonly stringArrayWrappersCount!: number;
+
+    /**
+     * @type {TStringArrayWrappersType}
+     */
+    @IsIn([StringArrayWrappersType.Variable, StringArrayWrappersType.Function])
+    public readonly stringArrayWrappersType!: TStringArrayWrappersType;
 
     /**
      * @type {number}
@@ -308,7 +357,11 @@ export class Options implements IOptions {
         @inject(ServiceIdentifiers.TInputOptions) inputOptions: TInputOptions,
         @inject(ServiceIdentifiers.IOptionsNormalizer) optionsNormalizer: IOptionsNormalizer
     ) {
-        Object.assign(this, DEFAULT_PRESET, inputOptions);
+        const optionsPreset: TInputOptions = Options.getOptionsByPreset(
+            inputOptions.optionsPreset ?? OptionsPreset.Default
+        );
+
+        Object.assign(this, optionsPreset, inputOptions);
 
         const errors: ValidationError[] = validateSync(this, Options.validatorOptions);
 
@@ -317,5 +370,19 @@ export class Options implements IOptions {
         }
 
         Object.assign(this, optionsNormalizer.normalize(this));
+    }
+
+    /**
+     * @param {TOptionsPreset} optionsPreset
+     * @returns {TInputOptions}
+     */
+    public static getOptionsByPreset (optionsPreset: TOptionsPreset): TInputOptions {
+        const options: TInputOptions | null = Options.optionPresetsMap.get(optionsPreset) ?? null;
+
+        if (!options) {
+            throw new Error(`Options for preset name \`${optionsPreset}\` are not found`);
+        }
+
+        return options;
     }
 }
