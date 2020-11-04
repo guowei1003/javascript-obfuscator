@@ -136,9 +136,25 @@ export class NodeGuards {
      * @param {Node} node
      * @returns {boolean}
      */
+    public static isExportSpecifierNode (node: ESTree.Node): node is ESTree.ExportSpecifier {
+        return node.type === NodeType.ExportSpecifier;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
     public static isExpressionStatementNode (node: ESTree.Node): node is ESTree.ExpressionStatement {
         return node.type === NodeType.ExpressionStatement
             && !('directive' in node);
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isForOfStatementNode (node: ESTree.Node): node is ESTree.ForOfStatement {
+        return node.type === NodeType.ForOfStatement;
     }
 
     /**
@@ -356,6 +372,14 @@ export class NodeGuards {
      */
     public static isSequenceExpressionNode (node: ESTree.Node): node is ESTree.SequenceExpression {
         return node.type === NodeType.SequenceExpression;
+    }
+
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    public static isSpreadElementNode (node: ESTree.Node): node is ESTree.SpreadElement {
+        return node.type === NodeType.SpreadElement;
     }
 
     /**

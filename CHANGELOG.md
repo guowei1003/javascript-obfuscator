@@ -1,5 +1,51 @@
 Change Log
 
+v2.6.4
+---
+* Added ignoring of all object members previous to `SpreadElement` when `transformObjectKeys` option is enabled. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/797
+
+v2.6.3
+---
+* Added `ExportSpecifierTransformer`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/791
+
+v2.6.2
+---
+* Fixed installation in `PowerShell`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/783
+* Tested under `Node.js@15`
+
+v2.6.1
+---
+* Fixed missing rename of object pattern properties in some cases. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/781
+
+v2.6.0
+---
+* Migration to `webpack@5`
+* Optimized performance of `ExpressionStatementsMergeTransformer` when `simplify` option is enabled. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/777
+* Fixed broken `identifierNamesGenerator: 'mangled-shuffled'` after `2.2.0`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/778
+
+v2.5.0
+---
+* Improved hierarchy of generated directories when `--output` is a directory path
+* Fixed wrong path generation for obfuscated files for `win32` environment. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/576
+* Fixed wrong path generation under for source map for `win32` environment. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/760
+* `javascript-obfuscator` now can be built under `win32` environment
+
+v2.4.3
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/769
+
+v2.4.2
+---
+* Fixed `URI-malformed` when `splitStrings` and `stringArrayEncoding` options are enabled. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/530
+
+v2.4.1
+---
+* Small release with some README.md improvements that allow to use it on [obfuscator.io](https://obfuscator.io)
+
+v2.4.0
+---
+* **New option:** `forceTransformStrings` allows force transform strings even if by `stringArrayThreshold` (or possible other thresholds in the future) they shouldn't be transformed. Implemented https://github.com/javascript-obfuscator/javascript-obfuscator/issues/657
+
 v2.3.1
 ---
 * Fixed a rare bug with `identifierNamesGenerator: 'mangled'` option that causes wrong identifier names generation
