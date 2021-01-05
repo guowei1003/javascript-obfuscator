@@ -5,7 +5,7 @@ import { TIdentifierNamesGeneratorFactory } from '../../types/container/generato
 import { TStringArrayEncoding } from '../../types/options/TStringArrayEncoding';
 
 import { IArrayUtils } from '../../interfaces/utils/IArrayUtils';
-import { ICryptUtilsSwappedAlphabet } from '../../interfaces/utils/ICryptUtilsSwappedAlphabet';
+import { ICryptUtilsStringArray } from '../../interfaces/utils/ICryptUtilsStringArray';
 import { IEncodedValue } from '../../interfaces/IEncodedValue';
 import { IIdentifierNamesGenerator } from '../../interfaces/generators/identifier-names-generators/IIdentifierNamesGenerator';
 import { IOptions } from '../../interfaces/options/IOptions';
@@ -18,7 +18,7 @@ import { StringArrayEncoding } from '../../enums/node-transformers/string-array-
 import { MapStorage } from '../MapStorage';
 
 @injectable()
-export class StringArrayStorage extends MapStorage <string, IStringArrayStorageItemData> implements IStringArrayStorage {
+export class StringArrayStorage extends MapStorage <`${string}-${TStringArrayEncoding}`, IStringArrayStorageItemData> implements IStringArrayStorage {
     /**
      * @type {number}
      */
@@ -28,6 +28,16 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
      * @type {number}
      */
     private static readonly maximumRotationAmount: number = 500;
+
+    /**
+     * @type {number}
+     */
+    private static readonly minimumIndexShiftAmount: number = 100;
+
+    /**
+     * @type {number}
+     */
+    private static readonly maximumIndexShiftAmount: number = 500;
 
     /**
      * @type {number}
@@ -50,9 +60,9 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
     private readonly arrayUtils: IArrayUtils;
 
     /**
-     * @type {ICryptUtilsSwappedAlphabet}
+     * @type {ICryptUtilsStringArray}
      */
-    private readonly cryptUtilsSwappedAlphabet: ICryptUtilsSwappedAlphabet;
+    private readonly cryptUtilsStringArray: ICryptUtilsStringArray;
 
     /**
      * @type {IIdentifierNamesGenerator}
@@ -68,6 +78,11 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
      * @type {Map<string, string[]>}
      */
     private readonly rc4EncodedValuesSourcesCache: Map<string, string[]> = new Map();
+
+    /**
+     * @type {number}
+     */
+    private indexShiftAmount: number = 0;
 
     /**
      * @type {number}
@@ -89,7 +104,7 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
      * @param {IArrayUtils} arrayUtils
      * @param {IRandomGenerator} randomGenerator
      * @param {IOptions} options
-     * @param {ICryptUtilsSwappedAlphabet} cryptUtilsSwappedAlphabet
+     * @param {ICryptUtilsStringArray} cryptUtilsStringArray
      */
     public constructor (
         @inject(ServiceIdentifiers.Factory__IIdentifierNamesGenerator)
@@ -97,13 +112,13 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
         @inject(ServiceIdentifiers.IArrayUtils) arrayUtils: IArrayUtils,
         @inject(ServiceIdentifiers.IRandomGenerator) randomGenerator: IRandomGenerator,
         @inject(ServiceIdentifiers.IOptions) options: IOptions,
-        @inject(ServiceIdentifiers.ICryptUtilsSwappedAlphabet) cryptUtilsSwappedAlphabet: ICryptUtilsSwappedAlphabet
+        @inject(ServiceIdentifiers.ICryptUtilsStringArray) cryptUtilsStringArray: ICryptUtilsStringArray
     ) {
         super(randomGenerator, options);
 
         this.identifierNamesGenerator = identifierNamesGeneratorFactory(options);
         this.arrayUtils = arrayUtils;
-        this.cryptUtilsSwappedAlphabet = cryptUtilsSwappedAlphabet;
+        this.cryptUtilsStringArray = cryptUtilsStringArray;
 
         this.rc4Keys = this.randomGenerator.getRandomGenerator()
             .n(
@@ -118,6 +133,12 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
     public initialize (): void {
         super.initialize();
 
+        this.indexShiftAmount = this.options.stringArrayIndexShift
+            ? this.randomGenerator.getRandomInteger(
+                StringArrayStorage.minimumIndexShiftAmount,
+                StringArrayStorage.maximumIndexShiftAmount
+            )
+            : 0;
         this.rotationAmount = this.options.rotateStringArray
             ? this.randomGenerator.getRandomInteger(
                 StringArrayStorage.minimumRotationAmount,
@@ -131,6 +152,13 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
      */
     public get (value: string): IStringArrayStorageItemData {
         return this.getOrSetIfDoesNotExist(value);
+    }
+
+    /**
+     * @returns {number}
+     */
+    public getIndexShiftAmount (): number {
+        return this.indexShiftAmount;
     }
 
     /**
@@ -199,9 +227,9 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
         this.storage = new Map(
             this.arrayUtils
                 .shuffle(Array.from(this.storage.entries()))
-                .map<[string, IStringArrayStorageItemData]>(
+                .map<[`${string}-${TStringArrayEncoding}`, IStringArrayStorageItemData]>(
                     (
-                        [value, stringArrayStorageItemData]: [string, IStringArrayStorageItemData],
+                        [value, stringArrayStorageItemData],
                         index: number
                     ) => {
                         stringArrayStorageItemData.index = index;
@@ -222,7 +250,9 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
      */
     private getOrSetIfDoesNotExist (value: string): IStringArrayStorageItemData {
         const { encodedValue, encoding, decodeKey }: IEncodedValue = this.getEncodedValue(value);
-        const storedStringArrayStorageItemData: IStringArrayStorageItemData | undefined = this.storage.get(encodedValue);
+
+        const cacheKey = <`${string}-${TStringArrayEncoding}`>`${encodedValue}-${encoding}`;
+        const storedStringArrayStorageItemData: IStringArrayStorageItemData | undefined = this.storage.get(cacheKey);
 
         if (storedStringArrayStorageItemData) {
             return storedStringArrayStorageItemData;
@@ -236,7 +266,7 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
             index: this.getLength()
         };
 
-        this.storage.set(encodedValue, stringArrayStorageItemData);
+        this.storage.set(cacheKey, stringArrayStorageItemData);
 
         return stringArrayStorageItemData;
     }
@@ -273,7 +303,7 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
              */
             case StringArrayEncoding.Rc4: {
                 const decodeKey: string = this.randomGenerator.getRandomGenerator().pickone(this.rc4Keys);
-                const encodedValue: string = this.cryptUtilsSwappedAlphabet.btoa(this.cryptUtilsSwappedAlphabet.rc4(value, decodeKey));
+                const encodedValue: string = this.cryptUtilsStringArray.btoa(this.cryptUtilsStringArray.rc4(value, decodeKey));
 
                 const encodedValueSources: string[] = this.rc4EncodedValuesSourcesCache.get(encodedValue) ?? [];
                 let encodedValueSourcesLength: number = encodedValueSources.length;
@@ -296,7 +326,7 @@ export class StringArrayStorage extends MapStorage <string, IStringArrayStorageI
 
             case StringArrayEncoding.Base64: {
                 const decodeKey: null = null;
-                const encodedValue: string = this.cryptUtilsSwappedAlphabet.btoa(value);
+                const encodedValue: string = this.cryptUtilsStringArray.btoa(value);
 
                 return { encodedValue, encoding, decodeKey };
             }

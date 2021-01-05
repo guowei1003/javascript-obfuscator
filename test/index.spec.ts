@@ -29,6 +29,7 @@ import './unit-tests/node/node-literal-utils/NodeLiteralUtils.spec';
 import './unit-tests/node/node-metadata/NodeMetadata.spec';
 import './unit-tests/node/node-statement-utils/NodeStatementUtils.spec';
 import './unit-tests/node/node-utils/NodeUtils.spec';
+import './unit-tests/node/numerical-expression-data-to-node-converter/NumericalExpressionDataToNodeConverter.spec';
 import './unit-tests/options/Options.spec';
 import './unit-tests/options/ValidationErrorsFormatter.spec';
 import './unit-tests/source-code/ObfuscatedCode.spec';
@@ -40,10 +41,11 @@ import './unit-tests/storages/string-array-transformers/string-array/StringArray
 import './unit-tests/storages/string-array-transformers/visited-lexical-scope-nodes-stack/VisitedLexicalScopeNodesStackStorage.spec';
 import './unit-tests/utils/ArrayUtils.spec';
 import './unit-tests/utils/CryptUtils.spec';
-import './unit-tests/utils/CryptUtilsSwappedAlphabet.spec';
+import './unit-tests/utils/CryptUtilsStringArray.spec';
 import './unit-tests/utils/EscapeSequenceEncoder.spec';
 import './unit-tests/utils/LevelledTopologicalSorter.spec';
 import './unit-tests/utils/NumberUtils.spec';
+import './unit-tests/utils/RandomGenerator.spec';
 import './unit-tests/utils/StringUtils.spec';
 import './unit-tests/utils/Utils.spec';
 
@@ -51,6 +53,7 @@ import './unit-tests/utils/Utils.spec';
  * Functional tests
  */
 import './functional-tests/analyzers/calls-graph-analyzer/CallsGraphAnalyzer.spec';
+import './functional-tests/analyzers/scope-analyzer/ScopeAnalyzer.spec';
 import './functional-tests/cli/JavaScriptObfuscatorCLI.spec';
 import './functional-tests/code-transformers/preparing-transformers/hashbang-operator-transformer/HashbangOperatorTransformer.spec';
 import './functional-tests/custom-code-helpers/common/templates/GlobalVariableNoEvalTemplate.spec';
@@ -96,12 +99,14 @@ import './functional-tests/node-transformers/converting-transformers/object-patt
 import './functional-tests/node-transformers/converting-transformers/split-string-transformer/SplitStringTransformer.spec';
 import './functional-tests/node-transformers/converting-transformers/template-literal-transformer/TemplateLiteralTransformer.spec';
 import './functional-tests/node-transformers/dead-code-injection-transformers/DeadCodeInjectionTransformer.spec';
+import './functional-tests/node-transformers/finalizing-transformers/directive-placement-transformer/DirectivePlacementTransformer.spec';
 import './functional-tests/node-transformers/finalizing-transformers/escape-sequence-transformer/EscapeSequenceTransformer.spec';
 import './functional-tests/node-transformers/initializing-transformers/comments-transformer/CommentsTransformer.spec';
 import './functional-tests/node-transformers/preparing-transformers/eval-call-expression-transformer/EvalCallExpressionTransformer.spec';
 import './functional-tests/node-transformers/preparing-transformers/obfuscating-guards/black-list-obfuscating-guard/BlackListObfuscatingGuard.spec';
 import './functional-tests/node-transformers/preparing-transformers/obfuscating-guards/conditional-comment-obfuscating-guard/ConditionalCommentObfuscatingGuard.spec';
 import './functional-tests/node-transformers/preparing-transformers/obfuscating-guards/force-transform-string-obfuscating-guard/ForceTransformStringObfuscatingGuard.spec';
+import './functional-tests/node-transformers/preparing-transformers/obfuscating-guards/ignored-require-import-obfuscating-guard/IgnoredRequireImportObfuscatingGuard.spec';
 import './functional-tests/node-transformers/preparing-transformers/obfuscating-guards/reserved-string-obfuscating-guard/ReservedStringObfuscatingGuard.spec';
 import './functional-tests/node-transformers/preparing-transformers/variable-preserve-transformer/VariablePreserveTransformer.spec';
 import './functional-tests/node-transformers/rename-identifiers-transformers/identifier-replacer/IdentifierReplacer.spec';
@@ -118,8 +123,9 @@ import './functional-tests/node-transformers/simplifying-transformers/block-stat
 import './functional-tests/node-transformers/simplifying-transformers/expression-statements-merge-transformer/ExpressionStatementsMergeTransformer.spec';
 import './functional-tests/node-transformers/simplifying-transformers/if-statement-simplify-transformer/IfStatementSimplifyTransformer.spec';
 import './functional-tests/node-transformers/simplifying-transformers/variable-declarations-merge-transformer/VariableDeclarationsMergeTransformer.spec';
-import './functional-tests/node-transformers/string-array-transformers/string-array-transformer/StringArrayTransformer.spec';
+import './functional-tests/node-transformers/string-array-transformers/string-array-rotate-function-transformer/StringArrayRotateFunctionTransformer.spec';
 import './functional-tests/node-transformers/string-array-transformers/string-array-scope-calls-wrapper-transformer/StringArrayScopeCallsWrapperTransformer.spec';
+import './functional-tests/node-transformers/string-array-transformers/string-array-transformer/StringArrayTransformer.spec';
 import './functional-tests/options/OptionsNormalizer.spec';
 import './functional-tests/options/domain-lock/Validation.spec';
 import './functional-tests/storages/string-array-transformers/string-array-storage/StringArrayStorage.spec';

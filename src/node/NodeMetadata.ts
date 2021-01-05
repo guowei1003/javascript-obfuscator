@@ -14,7 +14,10 @@ export class NodeMetadata {
      * @param {keyof T} metadataKey
      * @returns {T[keyof T] | undefined}
      */
-    public static get <T extends ESTree.BaseNodeMetadata> (node: ESTree.Node, metadataKey: keyof T): T[keyof T] | undefined {
+    public static get <
+        T extends ESTree.BaseNodeMetadata,
+        TMetadataKey extends keyof T
+    > (node: ESTree.Node, metadataKey: TMetadataKey): T[TMetadataKey] | undefined {
         return node.metadata !== undefined
             ? (<T>node.metadata)[metadataKey]
             : undefined;
@@ -25,7 +28,7 @@ export class NodeMetadata {
      * @returns {boolean}
      */
     public static isForceTransformNode (node: ESTree.Node): boolean {
-        return NodeMetadata.get(node, 'forceTransformNode') === true;
+        return NodeMetadata.get<ESTree.BaseNodeMetadata, 'forceTransformNode'>(node, 'forceTransformNode') === true;
     }
 
     /**
@@ -33,7 +36,7 @@ export class NodeMetadata {
      * @returns {boolean}
      */
     public static isIgnoredNode (node: ESTree.Node): boolean {
-        return NodeMetadata.get(node, 'ignoredNode') === true;
+        return NodeMetadata.get<ESTree.BaseNodeMetadata, 'ignoredNode'>(node, 'ignoredNode') === true;
     }
 
     /**
@@ -41,6 +44,6 @@ export class NodeMetadata {
      * @returns {boolean}
      */
     public static isReplacedLiteral (literalNode: ESTree.Literal): boolean {
-        return NodeMetadata.get<ESTree.LiteralNodeMetadata>(literalNode, 'replacedLiteral') === true;
+        return NodeMetadata.get<ESTree.LiteralNodeMetadata, 'replacedLiteral'>(literalNode, 'replacedLiteral') === true;
     }
 }

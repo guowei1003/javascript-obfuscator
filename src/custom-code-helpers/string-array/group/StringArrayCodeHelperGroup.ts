@@ -16,14 +16,12 @@ import { IStringArrayStorage } from '../../../interfaces/storages/string-array-t
 import { initializable } from '../../../decorators/Initializable';
 
 import { CustomCodeHelper } from '../../../enums/custom-code-helpers/CustomCodeHelper';
-import { ObfuscationEvent } from '../../../enums/event-emitters/ObfuscationEvent';
 import { StringArrayEncoding } from '../../../enums/node-transformers/string-array-transformers/StringArrayEncoding';
 
 import { AbstractCustomCodeHelperGroup } from '../../AbstractCustomCodeHelperGroup';
 import { NodeAppender } from '../../../node/NodeAppender';
 import { StringArrayCallsWrapperCodeHelper } from '../StringArrayCallsWrapperCodeHelper';
 import { StringArrayCodeHelper } from '../StringArrayCodeHelper';
-import { StringArrayRotateFunctionCodeHelper } from '../StringArrayRotateFunctionCodeHelper';
 
 @injectable()
 export class StringArrayCodeHelperGroup extends AbstractCustomCodeHelperGroup {
@@ -41,11 +39,6 @@ export class StringArrayCodeHelperGroup extends AbstractCustomCodeHelperGroup {
      */
     @initializable()
     protected customCodeHelpers!: Map <CustomCodeHelper, ICustomCodeHelper>;
-
-    /**
-     * @type {ObfuscationEvent}
-     */
-    protected appendEvent: ObfuscationEvent = ObfuscationEvent.AfterObfuscation;
 
     /**
      * @type {TCustomCodeHelperFactory}
@@ -82,7 +75,7 @@ export class StringArrayCodeHelperGroup extends AbstractCustomCodeHelperGroup {
      * @param {TNodeWithStatements} nodeWithStatements
      * @param {ICallsGraphData[]} callsGraphData
      */
-    public appendNodes (nodeWithStatements: TNodeWithStatements, callsGraphData: ICallsGraphData[]): void {
+    public appendOnFinalizingStage (nodeWithStatements: TNodeWithStatements, callsGraphData: ICallsGraphData[]): void {
         if (!this.stringArrayStorage.getLength()) {
             return;
         }
@@ -108,14 +101,6 @@ export class StringArrayCodeHelperGroup extends AbstractCustomCodeHelperGroup {
                 }
             );
         }
-
-        // stringArrayRotateFunction helper nodes append
-        this.appendCustomNodeIfExist(
-            CustomCodeHelper.StringArrayRotateFunction,
-            (customCodeHelper: ICustomCodeHelper<TInitialData<StringArrayRotateFunctionCodeHelper>>) => {
-                NodeAppender.insertAtIndex(nodeWithStatements, customCodeHelper.getNode(), 1);
-            }
-        );
     }
 
     public initialize (): void {
@@ -139,24 +124,13 @@ export class StringArrayCodeHelperGroup extends AbstractCustomCodeHelperGroup {
             const stringArrayCallsWrapperCodeHelper: ICustomCodeHelper<TInitialData<StringArrayCallsWrapperCodeHelper>> =
                 this.customCodeHelperFactory(stringArrayCallsWrapperCodeHelperName);
             const stringArrayCallsWrapperName: string = this.stringArrayStorage.getStorageCallsWrapperName(stringArrayEncoding);
-
             stringArrayCallsWrapperCodeHelper.initialize(
                 stringArrayName,
-                stringArrayCallsWrapperName
+                stringArrayCallsWrapperName,
+                this.stringArrayStorage.getIndexShiftAmount()
             );
 
             this.customCodeHelpers.set(stringArrayCallsWrapperCodeHelperName, stringArrayCallsWrapperCodeHelper);
-        }
-
-        // stringArrayRotateFunction helper initialize
-        const stringArrayRotateFunctionCodeHelper: ICustomCodeHelper<TInitialData<StringArrayRotateFunctionCodeHelper>> =
-            this.customCodeHelperFactory(CustomCodeHelper.StringArrayRotateFunction);
-        const stringArrayRotationAmount: number = this.stringArrayStorage.getRotationAmount();
-
-        stringArrayRotateFunctionCodeHelper.initialize(stringArrayName, stringArrayRotationAmount);
-
-        if (this.options.rotateStringArray) {
-            this.customCodeHelpers.set(CustomCodeHelper.StringArrayRotateFunction, stringArrayRotateFunctionCodeHelper);
         }
     }
 
