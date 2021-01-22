@@ -1,5 +1,13 @@
 Change Log
 
+v2.10.3
+---
+* Fixed `simplify` option regression after `2.10.2`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/864
+
+v2.10.2
+---
+* Fixed behavior of `simplify` options when a node with a single-statement `body` is inside simplified `IfStatement` node. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/860
+
 v2.10.1
 ---
 * Removed padding characters from all base64 encoded strings. Removed RegExp that trims padding characters from `base64` encoded strings from `atob` code helper to prevent mutation of `RegExp.$1` value during calls to the `stringArray`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/829
