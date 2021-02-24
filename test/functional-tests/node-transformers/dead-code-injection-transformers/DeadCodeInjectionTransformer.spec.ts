@@ -12,17 +12,17 @@ import { JavaScriptObfuscator } from '../../../../src/JavaScriptObfuscatorFacade
 describe('DeadCodeInjectionTransformer', () => {
     const variableMatch: string = '_0x([a-f0-9]){4,6}';
     const hexMatch: string = '0x[a-f0-9]';
-    const stringArrayCallMatch: string = `${variableMatch}\\('${hexMatch}'\\)`;
+    const stringArrayCallMatch: string = `${variableMatch}\\(${hexMatch}\\)`;
 
     describe('transformNode', function () {
         this.timeout(100000);
 
         describe('Variant #1 - 5 simple block statements', () => {
             const regExp: RegExp = new RegExp(
-                `if *\\(${variableMatch}\\('${hexMatch}'\\) *[=|!]== *${variableMatch}\\('${hexMatch}'\\)\\) *\\{`+
-                    `(?:console|${variableMatch})\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                `if *\\(${variableMatch}\\(${hexMatch}\\) *[=|!]== *${variableMatch}\\(${hexMatch}\\)\\) *\\{`+
+                    `(?:console|${variableMatch})\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                 `\\} *else *\\{`+
-                    `(?:console|${variableMatch})\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                    `(?:console|${variableMatch})\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                 `\\}`,
                 'g'
             );
@@ -58,7 +58,7 @@ describe('DeadCodeInjectionTransformer', () => {
         describe('Variant #2 - block statements count is less than `5`', () => {
             const regexp: RegExp = new RegExp(
                 `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                    `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                    `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                 `\\};`,
                 'g'
             );
@@ -94,7 +94,7 @@ describe('DeadCodeInjectionTransformer', () => {
         describe('Variant #3 - deadCodeInjectionThreshold: 0', () => {
             const regexp: RegExp = new RegExp(
                 `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                    `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                    `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                 `\\};`,
                 'g'
             );
@@ -131,7 +131,7 @@ describe('DeadCodeInjectionTransformer', () => {
             describe('Variant #1 - function declaration in block statement', () => {
                 const functionRegExp: RegExp = new RegExp(
                     `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                        `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                        `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                     `\\};`,
                     'g'
                 );
@@ -183,7 +183,7 @@ describe('DeadCodeInjectionTransformer', () => {
                 describe('Variant #1', () => {
                     const functionRegExp: RegExp = new RegExp(
                         `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                            `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                            `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                         `\\};`,
                         'g'
                     );
@@ -236,7 +236,7 @@ describe('DeadCodeInjectionTransformer', () => {
                 describe('Variant #2', () => {
                     const functionRegExp: RegExp = new RegExp(
                         `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                            `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                            `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                         `\\};`,
                         'g'
                     );
@@ -289,7 +289,7 @@ describe('DeadCodeInjectionTransformer', () => {
             describe('Variant #3 - await expression in block statement', () => {
                 const functionRegExp: RegExp = new RegExp(
                     `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                        `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                        `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                     `\\};`,
                     'g'
                 );
@@ -340,7 +340,7 @@ describe('DeadCodeInjectionTransformer', () => {
             describe('Variant #4 - yield expression in block statement', () => {
                 const functionRegExp: RegExp = new RegExp(
                     `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                        `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                        `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                     `\\};`,
                     'g'
                 );
@@ -391,7 +391,7 @@ describe('DeadCodeInjectionTransformer', () => {
             describe('Variant #5 - super expression in block statement', () => {
                 const functionRegExp: RegExp = new RegExp(
                     `var ${variableMatch} *= *function *\\(\\) *\\{` +
-                        `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                        `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                     `\\};`,
                     'g'
                 );
@@ -436,6 +436,57 @@ describe('DeadCodeInjectionTransformer', () => {
 
                 it('match #2: shouldn\'t add dead code', () => {
                     assert.equal(superExpressionMatchesLength, expectedSuperExpressionMatchesLength);
+                });
+            });
+
+            describe('Variant #6 - for-await expression in block statement', () => {
+                const functionRegExp: RegExp = new RegExp(
+                    `var ${variableMatch} *= *function *\\(\\) *\\{` +
+                        `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
+                    `\\};`,
+                    'g'
+                );
+                const awaitExpressionRegExp: RegExp = new RegExp(
+                    `for await *\\(const ${variableMatch} of *\\[]\\){}`,
+                    'g'
+                );
+                const expectedFunctionMatchesLength: number = 4;
+                const expectedAwaitExpressionMatchesLength: number = 1;
+
+                let functionMatchesLength: number = 0,
+                    awaitExpressionMatchesLength: number = 0;
+
+                before(() => {
+                    const code: string = readFileAsString(__dirname + '/fixtures/for-await-expression.js');
+
+                    const obfuscatedCode: string = JavaScriptObfuscator.obfuscate(
+                        code,
+                        {
+                            ...NO_ADDITIONAL_NODES_PRESET,
+                            deadCodeInjection: true,
+                            deadCodeInjectionThreshold: 1,
+                            stringArray: true,
+                            stringArrayThreshold: 1
+                        }
+                    ).getObfuscatedCode();
+                    const functionMatches: RegExpMatchArray = <RegExpMatchArray>obfuscatedCode.match(functionRegExp);
+                    const awaitExpressionMatches: RegExpMatchArray = <RegExpMatchArray>obfuscatedCode.match(awaitExpressionRegExp);
+
+                    if (functionMatches) {
+                        functionMatchesLength = functionMatches.length;
+                    }
+
+                    if (awaitExpressionMatches) {
+                        awaitExpressionMatchesLength = awaitExpressionMatches.length;
+                    }
+                });
+
+                it('match #1: shouldn\'t add dead code', () => {
+                    assert.equal(functionMatchesLength, expectedFunctionMatchesLength);
+                });
+
+                it('match #2: shouldn\'t add dead code', () => {
+                    assert.equal(awaitExpressionMatchesLength, expectedAwaitExpressionMatchesLength);
                 });
             });
         });
@@ -545,7 +596,7 @@ describe('DeadCodeInjectionTransformer', () => {
         describe('Variant #6 - block scope of block statement is `ProgramNode`', () => {
             const regExp: RegExp = new RegExp(
                 `if *\\(!!\\[\\]\\) *{` +
-                    `console\\[${variableMatch}\\('${hexMatch}'\\)\\]\\(${variableMatch}\\('${hexMatch}'\\)\\);` +
+                    `console\\[${variableMatch}\\(${hexMatch}\\)\\]\\(${variableMatch}\\(${hexMatch}\\)\\);` +
                 `\\}`
             );
 

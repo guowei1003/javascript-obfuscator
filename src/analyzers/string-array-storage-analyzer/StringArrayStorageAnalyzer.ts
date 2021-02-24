@@ -11,8 +11,8 @@ import { IStringArrayStorageAnalyzer } from '../../interfaces/analyzers/string-a
 import { IStringArrayStorageItemData } from '../../interfaces/storages/string-array-transformers/IStringArrayStorageItem';
 
 import { NodeGuards } from '../../node/NodeGuards';
-import { NodeMetadata } from '../../node/NodeMetadata';
 import { NodeLiteralUtils } from '../../node/NodeLiteralUtils';
+import { NodeMetadata } from '../../node/NodeMetadata';
 
 /**
  * Adds values of literal nodes to the string array storage
@@ -88,18 +88,10 @@ export class StringArrayStorageAnalyzer implements IStringArrayStorageAnalyzer {
 
     /**
      * @param {Literal} literalNode
-     * @returns {IStringArrayStorageItemData | undefined}
-     */
-    public getItemDataForLiteralNode (literalNode: ESTree.Literal): IStringArrayStorageItemData | undefined {
-        return this.stringArrayStorageData.get(literalNode);
-    }
-
-    /**
-     * @param {Literal} literalNode
      * @param {Node} parentNode
      */
-    private analyzeLiteralNode (literalNode: ESTree.Literal, parentNode: ESTree.Node): void {
-        if (typeof literalNode.value !== 'string') {
+    public analyzeLiteralNode (literalNode: ESTree.Literal, parentNode: ESTree.Node): void {
+        if (!NodeLiteralUtils.isStringLiteralNode(literalNode)) {
             return;
         }
 
@@ -107,10 +99,17 @@ export class StringArrayStorageAnalyzer implements IStringArrayStorageAnalyzer {
             return;
         }
 
-        if (!this.shouldAddValueToStringArray(literalNode.value)) {
+        if (!this.shouldAddValueToStringArray(literalNode)) {
             return;
         }
 
+        this.addItemDataForLiteralNode(literalNode);
+    }
+
+    /**
+     * @param {(SimpleLiteral & {value: string}) | (RegExpLiteral & {value: string})} literalNode
+     */
+    public addItemDataForLiteralNode (literalNode: ESTree.Literal & {value: string}): void {
         this.stringArrayStorageData.set(
             literalNode,
             this.stringArrayStorage.getOrThrow(literalNode.value)
@@ -118,11 +117,25 @@ export class StringArrayStorageAnalyzer implements IStringArrayStorageAnalyzer {
     }
 
     /**
-     * @param {string} value
+     * @param {Literal} literalNode
+     * @returns {IStringArrayStorageItemData | undefined}
+     */
+    public getItemDataForLiteralNode (literalNode: ESTree.Literal): IStringArrayStorageItemData | undefined {
+        return this.stringArrayStorageData.get(literalNode);
+    }
+
+    /**
+     * @param {(SimpleLiteral & {value: string})} literalNode
      * @returns {boolean}
      */
-    private shouldAddValueToStringArray (value: string): boolean {
-        return value.length >= StringArrayStorageAnalyzer.minimumLengthForStringArray
+    private shouldAddValueToStringArray (literalNode: ESTree.Literal & {value: string}): boolean {
+        const isForceTransformNode: boolean = NodeMetadata.isForceTransformNode(literalNode);
+
+        if (isForceTransformNode) {
+            return true;
+        }
+
+        return literalNode.value.length >= StringArrayStorageAnalyzer.minimumLengthForStringArray
             && this.randomGenerator.getMathRandom() <= this.options.stringArrayThreshold;
     }
 }

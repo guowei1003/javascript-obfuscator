@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import * as commander from 'commander';
 import * as path from 'path';
 
@@ -29,6 +30,7 @@ import { Logger } from '../logger/Logger';
 import { ObfuscatedCodeWriter } from './utils/ObfuscatedCodeWriter';
 import { SourceCodeReader } from './utils/SourceCodeReader';
 import { Utils } from '../utils/Utils';
+import { StringArrayIndexesType } from '../enums/node-transformers/string-array-transformers/StringArrayIndexesType';
 
 export class JavaScriptObfuscatorCLI implements IInitializable {
     /**
@@ -231,6 +233,11 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
                 ArraySanitizer
             )
             .option(
+                '--force-transform-strings <list> (comma separated, without whitespaces)',
+                'Enables force transformation of string literals, which being matched by passed RegExp patterns (comma separated)',
+                ArraySanitizer
+            )
+            .option(
                 '--identifier-names-generator <string>',
                 'Sets identifier names generator. ' +
                 `Values: ${CLIUtils.stringifyOptionAvailableValues(IdentifierNamesGenerator)}. ` +
@@ -244,6 +251,10 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
                 '--identifiers-dictionary <list> (comma separated, without whitespaces)',
                 'Identifiers dictionary (comma separated) for `--identifier-names-generator dictionary` option',
                 ArraySanitizer
+            )
+            .option(
+                '--ignore-require-imports <boolean>', 'Prevents obfuscation of `require` imports',
+                BooleanSanitizer
             )
             .option(
                 '--log <boolean>', 'Enables logging of the information to the console',
@@ -341,6 +352,18 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
                 ArraySanitizer
             )
             .option(
+                '--string-array-indexes-type <list> (comma separated, without whitespaces)',
+                'Encodes each string in strings array using base64 or rc4 (this option can slow down your code speed). ' +
+                `Values: ${CLIUtils.stringifyOptionAvailableValues(StringArrayIndexesType)}. ` +
+                `Default: ${StringArrayIndexesType.HexadecimalNumber}`,
+                ArraySanitizer
+            )
+            .option(
+                '--string-array-index-shift <boolean>',
+                'Enables additional index shift for all string array calls',
+                BooleanSanitizer
+            )
+            .option(
                 '--string-array-wrappers-count <number>',
                 'Sets the count of wrappers for the string array inside each root or function scope',
                 parseInt
@@ -349,6 +372,11 @@ export class JavaScriptObfuscatorCLI implements IInitializable {
                 '--string-array-wrappers-chained-calls <boolean>',
                 'Enables the chained calls between string array wrappers',
                 BooleanSanitizer
+            )
+            .option(
+                '--string-array-wrappers-parameters-max-count <number>',
+                'Allows to control the maximum number of string array wrappers parameters',
+                parseInt
             )
             .option(
                 '--string-array-wrappers-type <string>',

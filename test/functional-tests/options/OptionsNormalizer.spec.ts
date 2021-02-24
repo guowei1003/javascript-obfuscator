@@ -544,6 +544,7 @@ describe('OptionsNormalizer', () => {
                     shuffleStringArray: true,
                     stringArray: false,
                     stringArrayEncoding: [StringArrayEncoding.Rc4],
+                    stringArrayIndexShift: true,
                     stringArrayWrappersChainedCalls: true,
                     stringArrayWrappersCount: 5,
                     stringArrayThreshold: 0.5,
@@ -555,6 +556,7 @@ describe('OptionsNormalizer', () => {
                     shuffleStringArray: false,
                     stringArray: false,
                     stringArrayEncoding: [StringArrayEncoding.None],
+                    stringArrayIndexShift: false,
                     stringArrayWrappersChainedCalls: false,
                     stringArrayWrappersCount: 0,
                     stringArrayThreshold: 0,
@@ -579,34 +581,6 @@ describe('OptionsNormalizer', () => {
                     stringArrayEncoding: [
                         StringArrayEncoding.None
                     ]
-                };
-            });
-
-            it('should normalize options preset', () => {
-                assert.deepEqual(optionsPreset, expectedOptionsPreset);
-            });
-        });
-
-        describe('stringArrayThresholdRule', () => {
-            before(() => {
-                optionsPreset = getNormalizedOptions({
-                    ...getDefaultOptions(),
-                    rotateStringArray: true,
-                    shuffleStringArray: true,
-                    stringArray: true,
-                    stringArrayWrappersChainedCalls: true,
-                    stringArrayWrappersCount: 5,
-                    stringArrayThreshold: 0
-                });
-
-                expectedOptionsPreset = {
-                    ...getDefaultOptions(),
-                    rotateStringArray: false,
-                    shuffleStringArray: false,
-                    stringArray: false,
-                    stringArrayWrappersChainedCalls: false,
-                    stringArrayWrappersCount: 0,
-                    stringArrayThreshold: 0
                 };
             });
 

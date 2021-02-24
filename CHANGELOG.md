@@ -1,5 +1,118 @@
 Change Log
 
+v2.10.3
+---
+* Fixed `simplify` option regression after `2.10.2`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/864
+
+v2.10.2
+---
+* Fixed behavior of `simplify` options when a node with a single-statement `body` is inside simplified `IfStatement` node. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/860
+
+v2.10.1
+---
+* Removed padding characters from all base64 encoded strings. Removed RegExp that trims padding characters from `base64` encoded strings from `atob` code helper to prevent mutation of `RegExp.$1` value during calls to the `stringArray`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/829
+
+v2.10.0
+---
+* Improved `rotateStringArray` option
+
+v2.9.6
+---
+* Preventing move of `"use strict";` directive during obfuscation
+
+v2.9.5
+---
+* Fixed runtime errors in large obfuscated code when both `rc4` and `base64` encodings are enabled
+* Some internal refactoring related to node append events
+
+v2.9.4
+---
+* Fixed missing prefix of root identifiers added by `stringArrayWrappersCount` option when `identifiersPrefix` option is set
+
+v2.9.3
+---
+* **CLI**: Fixed wrong name of obfuscated files when input directory path is the `.` symbol. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/816
+
+v2.9.2
+---
+* Ignore object expressions as body of arrow function expression when `transformObjectKeys` option is enabled. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/813
+
+v2.9.1
+---
+* Fixed wrong `stringArrayWrappersParametersMaxCount` CLI option name
+
+v2.9.0
+---
+* New option: `stringArrayIndexesType` accepts an array of types of string array call indexes
+* Changed default type of all string array call indexes from `hexadecimal-numeric-string` to `hexadecimal-number`
+* New option: `stringArrayIndexShift` enables additional index shift for all string array calls
+* New option: ``stringArrayWrappersParametersMaxCount`` allows to control the maximum number of string array wrappers parameters
+* `stringArrayWrappersType: 'function'` option value moved from `high-obfuscation` to `medium-obfuscation` options preset
+
+v2.8.1
+---
+* Fixed incorrect rename of the identifiers of the added helpers in some rare cases. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/804
+
+v2.8.0
+---
+* New option `ignoreRequireImports` prevents obfuscation of `require` imports. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/801
+
+v2.7.1
+---
+* Updated `@javascript-obfuscator/escodegen` to `2.1.1`
+
+v2.7.0
+---
+* Switched form `escodegen` to `@javascript-obfuscator/escodegen`
+* Full support of `nullish-coalescing`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/604
+* Support for `exported` field of `ExportAllDeclaration` node. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/710
+
+v2.6.4
+---
+* Added ignoring of all object members previous to `SpreadElement` when `transformObjectKeys` option is enabled. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/797
+
+v2.6.3
+---
+* Added `ExportSpecifierTransformer`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/791
+
+v2.6.2
+---
+* Fixed installation in `PowerShell`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/783
+* Tested under `Node.js@15`
+
+v2.6.1
+---
+* Fixed missing rename of object pattern properties in some cases. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/781
+
+v2.6.0
+---
+* Migration to `webpack@5`
+* Optimized performance of `ExpressionStatementsMergeTransformer` when `simplify` option is enabled. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/777
+* Fixed broken `identifierNamesGenerator: 'mangled-shuffled'` after `2.2.0`. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/778
+
+v2.5.0
+---
+* Improved hierarchy of generated directories when `--output` is a directory path
+* Fixed wrong path generation for obfuscated files for `win32` environment. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/576
+* Fixed wrong path generation under for source map for `win32` environment. Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/760
+* `javascript-obfuscator` now can be built under `win32` environment
+
+v2.4.3
+---
+* Fixed https://github.com/javascript-obfuscator/javascript-obfuscator/issues/769
+
+v2.4.2
+---
+* Fixed `URI-malformed` when `splitStrings` and `stringArrayEncoding` options are enabled. https://github.com/javascript-obfuscator/javascript-obfuscator/issues/530
+
+v2.4.1
+---
+* Small release with some README.md improvements that allow to use it on [obfuscator.io](https://obfuscator.io)
+
+v2.4.0
+---
+* **New option:** `forceTransformStrings` allows force transform strings even if by `stringArrayThreshold` (or possible other thresholds in the future) they shouldn't be transformed. Implemented https://github.com/javascript-obfuscator/javascript-obfuscator/issues/657
+
 v2.3.1
 ---
 * Fixed a rare bug with `identifierNamesGenerator: 'mangled'` option that causes wrong identifier names generation

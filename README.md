@@ -34,8 +34,8 @@ The example of obfuscated code: [github.com](https://github.com/javascript-obfus
 
 [![npm version](https://badge.fury.io/js/javascript-obfuscator.svg)](https://badge.fury.io/js/javascript-obfuscator)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fjavascript-obfuscator%2Fjavascript-obfuscator.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fjavascript-obfuscator%2Fjavascript-obfuscator?ref=badge_shield)
-[![Build Status](https://travis-ci.com/javascript-obfuscator/javascript-obfuscator.svg?branch=master)](https://travis-ci.com/javascript-obfuscator/javascript-obfuscator)
-[![Coverage Status](https://coveralls.io/repos/github/javascript-obfuscator/javascript-obfuscator/badge.svg?branch=master)](https://coveralls.io/github/javascript-obfuscator/javascript-obfuscator?branch=master)
+![Build Status](https://github.com/javascript-obfuscator/javascript-obfuscator/workflows/JavaScript%20Obfuscator%20CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/javascript-obfuscator/javascript-obfuscator/badge.svg)](https://coveralls.io/github/javascript-obfuscator/javascript-obfuscator)
 [![Backers on Open Collective](https://opencollective.com/javascript-obfuscator/backers/badge.svg)](#backers) 
 [![Sponsors on Open Collective](https://opencollective.com/javascript-obfuscator/sponsors/badge.svg)](#sponsors)
 [![xscode](https://img.shields.io/badge/Available%20on-xs%3Acode-blue?style=?style=plastic&logo=appveyor&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////////VXz1bAAAAAJ0Uk5T/wDltzBKAAAAlUlEQVR42uzXSwqAMAwE0Mn9L+3Ggtgkk35QwcnSJo9S+yGwM9DCooCbgn4YrJ4CIPUcQF7/XSBbx2TEz4sAZ2q1RAECBAiYBlCtvwN+KiYAlG7UDGj59MViT9hOwEqAhYCtAsUZvL6I6W8c2wcbd+LIWSCHSTeSAAECngN4xxIDSK9f4B9t377Wd7H5Nt7/Xz8eAgwAvesLRjYYPuUAAAAASUVORK5CYII=)](https://xscode.com/sanex3339/javascript-obfuscator)
@@ -44,7 +44,7 @@ The example of obfuscated code: [github.com](https://github.com/javascript-obfus
 * (OpenCollective) https://opencollective.com/javascript-obfuscator
 * PayPal credit card [https://www.paypal.com/donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=javascript-obfuscator@yandex.ru&lc=US&no_note=0&item_name=Support+javascript-obfuscator&cn=&curency_code=USD&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted)
 * PayPal https://www.paypal.me/javascriptobfuscator
-* (Bitcoin) 14yhtZxLNp6ekZAgmEmPJqEKUP2VtUxQK6
+* (Bitcoin) 1Nv2773RDNzodHDxuxaYkTvwBkYRHmPhnG
 
 Huge thanks to all supporters!
 
@@ -119,83 +119,103 @@ var obfuscationResult = JavaScriptObfuscator.obfuscate(
 
 console.log(obfuscationResult.getObfuscatedCode());
 /*
-var _0x236b = [
-    '8|3|2|4|7|',
-    'izyPY',
-    'ZXpNn',
-    'split',
-    '1|5|9|6|0',
-    'foo\x20',
-    'xPhYQ',
-    'sKneg',
-    'thwwU',
+var _0x1139 = [
+    '250745hAZAIu',
+    'qyvdX',
+    '359787rBCuAH',
+    'map',
+    'CAsQH',
+    '2yDlJiW',
+    'IzZqs',
+    '3|8|4|5|0|',
+    '975554pJYIxL',
+    '2sejBjT',
+    '258646CmEwYP',
+    '23651lJjzwJ',
+    'xqNJa',
+    '37rnYVXp',
     'log',
-    'map'
+    'WudlX',
+    'cIfMd',
+    'foo\x20',
+    '2GUqEHE',
+    '2|6|7|9|1',
+    '238609DyHPrO',
+    'split',
+    '828371LpDRiJ'
 ];
-(function (_0x34d326, _0xc4ba4e) {
-    var _0xcd0f69 = function (_0x39b54a) {
-        while (--_0x39b54a) {
-            _0x34d326['push'](_0x34d326['shift']());
-        }
-    };
-    _0xcd0f69(++_0xc4ba4e);
-}(_0x236b, 0x31 + 0x42 * -0x27 + 0xbbc));
-var _0x17c9 = function (_0x34d326, _0xc4ba4e) {
-    _0x34d326 = _0x34d326 - (0x31 + 0x42 * -0x27 + 0x9dd);
-    var _0xcd0f69 = _0x236b[_0x34d326];
-    return _0xcd0f69;
+var _0x1054 = function (_0x14a2a4, _0x5a6b22) {
+    _0x14a2a4 = _0x14a2a4 - (0x1c48 + -0x1dd + 0x38f * -0x7);
+    var _0x581b0b = _0x1139[_0x14a2a4];
+    return _0x581b0b;
 };
-(function () {
-    var _0x32cb02 = _0x17c9, _0x41d9b4 = {
-            'thwwU': _0x32cb02('0x5') + _0x32cb02('0x9'),
-            'xPhYQ': function (_0x176227, _0x3e4c2d) {
-                return _0x176227 + _0x3e4c2d;
-            },
-            'izyPY': function (_0x13389c, _0x58f8bc) {
-                return _0x13389c + _0x58f8bc;
-            },
-            'sKneg': _0x32cb02('0xa'),
-            'ZXpNn': function (_0x1e08e1, _0x5cba70) {
-                return _0x1e08e1 - _0x5cba70;
-            }
-        }, _0x2f8df3 = _0x41d9b4[_0x32cb02('0x2')][_0x32cb02('0x8')]('|'), _0x2087f0 = -0x9a * 0x1f + 0x15 * 0x3 + 0x1267;
+(function (_0x190a1e, _0x14558c) {
+    var _0x59720b = _0x1054;
     while (!![]) {
-        switch (_0x2f8df3[_0x2087f0++]) {
+        try {
+            var _0x3dab81 = parseInt(_0x59720b(0x196)) * parseInt(_0x59720b(0x191)) + parseInt(_0x59720b(0x193)) * parseInt(_0x59720b(0x184)) + parseInt(_0x59720b(0x198)) * parseInt(_0x59720b(0x188)) + parseInt(_0x59720b(0x18a)) * parseInt(_0x59720b(0x18c)) + -parseInt(_0x59720b(0x187)) + -parseInt(_0x59720b(0x189)) + -parseInt(_0x59720b(0x195));
+            if (_0x3dab81 === _0x14558c)
+                break;
+            else
+                _0x190a1e['push'](_0x190a1e['shift']());
+        } catch (_0x58f14d) {
+            _0x190a1e['push'](_0x190a1e['shift']());
+        }
+    }
+}(_0x1139, 0x2c5c * -0x7 + -0xdfdc6 + 0x16ff98), function () {
+    var _0x9b877 = _0x1054, _0x4add6f = {
+            'WudlX': _0x9b877(0x186) + _0x9b877(0x192),
+            'qyvdX': function (_0x552261, _0x28d3ee) {
+                return _0x552261 + _0x28d3ee;
+            },
+            'xqNJa': function (_0x387474, _0x5602bf) {
+                return _0x387474 + _0x5602bf;
+            },
+            'CAsQH': _0x9b877(0x190),
+            'IzZqs': function (_0x5d9fd2, _0x9f4faa) {
+                return _0x5d9fd2 - _0x9f4faa;
+            },
+            'cIfMd': function (_0x5f18e0, _0x4c33c5) {
+                return _0x5f18e0 + _0x4c33c5;
+            }
+        }, _0x593549 = _0x4add6f[_0x9b877(0x18e)][_0x9b877(0x194)]('|'), _0x2acb4f = -0x94b + -0x2627 * -0x1 + 0xe6e * -0x2;
+    while (!![]) {
+        switch (_0x593549[_0x2acb4f++]) {
         case '0':
-            console[_0x32cb02('0x3')](_0x2e20e0);
+            var _0x10d015 = _0x4add6f[_0x9b877(0x197)](_0x4add6f[_0x9b877(0x18b)](_0x4add6f[_0x9b877(0x183)], -0x3d * -0xc + -0x6f1 * -0x1 + 0x42 * -0x26), 0x62f * 0x3 + 0x1046 * -0x1 + -0x246);
             continue;
         case '1':
-            console[_0x32cb02('0x3')](_0x3c882f);
+            console[_0x9b877(0x18d)](_0x10d015);
             continue;
         case '2':
-            var _0x39f804 = _0x41d9b4[_0x32cb02('0x0')]('5', -'2');
+            console[_0x9b877(0x18d)](_0x4cd6e2);
             continue;
         case '3':
-            var _0x700005 = _0x41d9b4[_0x32cb02('0x6')]('5', 0x1818 + 0x11b5 + -0x29ca);
+            var _0x4cd6e2 = _0x4add6f[_0x9b877(0x185)]('5', -0x1bc + 0xf61 + 0x5 * -0x2ba);
             continue;
         case '4':
-            var _0x172286 = [
+            var _0x2c3053 = _0x4add6f[_0x9b877(0x18b)]('5', -'2');
+            continue;
+        case '5':
+            var _0x372d29 = [
                 '10',
                 '10',
                 '10',
                 '10',
                 '10'
-            ][_0x32cb02('0x4')](parseInt);
-            continue;
-        case '5':
-            console[_0x32cb02('0x3')](_0x700005);
+            ][_0x9b877(0x182)](parseInt);
             continue;
         case '6':
-            console[_0x32cb02('0x3')](_0x172286);
+            console[_0x9b877(0x18d)](_0x109ffa);
             continue;
         case '7':
-            var _0x2e20e0 = _0x41d9b4[_0x32cb02('0x6')](_0x41d9b4[_0x32cb02('0x6')](_0x41d9b4[_0x32cb02('0x1')], -0x2596 + -0x27b * 0x1 + 0xdf * 0x2e), 0x1 * 0x1b06 + -0x1b8e * -0x1 + 0x1 * -0x3693);
+            console[_0x9b877(0x18d)](_0x2c3053);
             continue;
         case '8':
-            var _0x3c882f = _0x41d9b4[_0x32cb02('0x7')]('5', 0x1dc1 * -0x1 + 0x1d59 + 0x6b);
+            var _0x109ffa = _0x4add6f[_0x9b877(0x18f)]('5', -0x1d70 + -0x1654 + -0xf1 * -0x37);
             continue;
         case '9':
-            console[_0x32cb02('0x3')](_0x39f804);
+            console[_0x9b877(0x18d)](_0x372d29);
             continue;
         }
         break;
@@ -307,7 +327,7 @@ Kind of variables of inserted nodes will auto-detected, based on most prevailing
 ## Conflicts of identifier names between different files
 
 During obfuscation of the different files, the same names can be generated for the global identifiers between these files.
-To prevent this set the unique prefix for all global identifiers for each obfuscated file with [`identifiersPrefix`](#identifiersPrefix) option. 
+To prevent this set the unique prefix for all global identifiers for each obfuscated file with [`identifiersPrefix`](#identifiersprefix) option. 
 
 When using CLI this prefix will be added automatically.
 
@@ -339,9 +359,11 @@ Following options are available for the JS Obfuscator:
     debugProtectionInterval: false,
     disableConsoleOutput: false,
     domainLock: [],
+    forceTransformStrings: [],
     identifierNamesGenerator: 'hexadecimal',
     identifiersDictionary: [],
     identifiersPrefix: '',
+    ignoreRequireImports: false,
     inputFileName: '',
     log: false,
     numbersToExpressions: false,
@@ -362,9 +384,14 @@ Following options are available for the JS Obfuscator:
     splitStrings: false,
     splitStringsChunkLength: 10,
     stringArray: true,
+    stringArrayCallsIndexType: [
+        'hexadecimal-number'
+    ],
     stringArrayEncoding: [],
+    stringArrayIndexShift: true,
     stringArrayWrappersCount: 1,
     stringArrayWrappersChainedCalls: true,
+    stringArrayWrappersParametersMaxCount: 2,
     stringArrayWrappersType: 'variable',
     stringArrayThreshold: 0.75,
     target: 'browser',
@@ -391,9 +418,11 @@ Following options are available for the JS Obfuscator:
     --disable-console-output <boolean>
     --domain-lock '<list>' (comma separated)
     --exclude '<list>' (comma separated)
+    --force-transform-strings '<list>' (comma separated)
     --identifier-names-generator <string> [dictionary, hexadecimal, mangled, mangled-shuffled]
     --identifiers-dictionary '<list>' (comma separated)
     --identifiers-prefix <string>
+    --ignore-require-imports <boolean>
     --log <boolean>
     --numbers-to-expressions <boolean>
     --options-preset <string> [default, low-obfuscation, medium-obfuscation, high-obfuscation]
@@ -413,15 +442,20 @@ Following options are available for the JS Obfuscator:
     --split-strings <boolean>
     --split-strings-chunk-length <number>
     --string-array <boolean>
+    --string-array-calls-index-type '<list>' (comma separated) [hexadecimal-number, hexadecimal-numeric-string]
     --string-array-encoding '<list>' (comma separated) [none, base64, rc4]
+    --string-array-index-shift <boolean>
     --string-array-wrappers-count <number>
     --string-array-wrappers-chained-calls <boolean>
+    --string-array-wrappers-parameters-max-count <number>
     --string-array-wrappers-type <string> [variable, function]
     --string-array-threshold <number>
     --target <string> [browser, browser-no-eval, node]
     --transform-object-keys <boolean>
     --unicode-escape-sequence <boolean>
 ```
+
+<!-- ##options-start## -->
 
 ### `compact`
 Type: `boolean` Default: `true`
@@ -656,13 +690,32 @@ Type: `string[]` Default: `[]`
 
 A file names or globs which indicates files to exclude from obfuscation. 
 
+### `forceTransformStrings`
+Type: `string[]` Default: `[]`
+
+Enables force transformation of string literals, which being matched by passed RegExp patterns.
+
+##### :warning: This option affects only strings that shouldn't be transformed by [`stringArrayThreshold`](#stringarraythreshold) (or possible other thresholds in the future)
+
+The option has a priority over `reservedStrings` option but hasn't a priority over `conditional comments`.
+
+Example:
+```ts
+	{
+		forceTransformStrings: [
+			'some-important-value',
+			'some-string_\d'
+		]
+	}
+```
+
 ### `identifierNamesGenerator`
 Type: `string` Default: `hexadecimal`
 
 Sets identifier names generator.
 
 Available values:
-* `dictionary`: identifier names from [`identifiersDictionary`](#identifiersDictionary) list
+* `dictionary`: identifier names from [`identifiersDictionary`](#identifiersdictionary) list
 * `hexadecimal`: identifier names like `_0xabc123`
 * `mangled`: short identifier names like `a`, `b`, `c`
 * `mangled-shuffled`: same as `mangled` but with shuffled alphabet
@@ -670,7 +723,7 @@ Available values:
 ### `identifiersDictionary`
 Type: `string[]` Default: `[]`
 
-Sets identifiers dictionary for [`identifierNamesGenerator`](#identifierNamesGenerator): `dictionary` option. Each identifier from the dictionary will be used in a few variants with a different casing of each character. Thus, the number of identifiers in the dictionary should depend on the identifiers amount at original source code.
+Sets identifiers dictionary for [`identifierNamesGenerator`](#identifiernamesgenerator): `dictionary` option. Each identifier from the dictionary will be used in a few variants with a different casing of each character. Thus, the number of identifiers in the dictionary should depend on the identifiers amount at original source code.
 
 ### `identifiersPrefix`
 Type: `string` Default: `''`
@@ -678,6 +731,11 @@ Type: `string` Default: `''`
 Sets prefix for all global identifiers.
 
 Use this option when you want to obfuscate multiple files. This option helps to avoid conflicts between global identifiers of these files. Prefix should be different for every file.
+
+### `ignoreRequireImports`
+Type: `boolean` Default: `false`
+
+Prevents obfuscation of `require` imports. Could be helpful in some cases when for some reason runtime environment requires these imports with static strings only.
 
 ### `inputFileName`
 Type: `string` Default: `''`
@@ -730,9 +788,9 @@ Type: `boolean` Default: `false`
 
 Enables renaming of property names. All built-in DOM properties and properties in core JavaScript classes will be ignored.
 
-To set format of renamed property names use [`identifierNamesGenerator`](#identifierNamesGenerator) option.
+To set format of renamed property names use [`identifierNamesGenerator`](#identifiernamesgenerator) option.
 
-To control which properties will be renamed use [`reservedNames`](#reservedNames) option.
+To control which properties will be renamed use [`reservedNames`](#reservednames) option.
 
 Example: 
 ```ts
@@ -799,8 +857,6 @@ Type: `boolean` Default: `true`
 ##### :warning: [`stringArray`](#stringarray) must be enabled
 
 Shift the `stringArray` array by a fixed and random (generated at the code obfuscation) places. This makes it harder to match the order of the removed strings to their original place.
-
-This option is recommended if your original source code isn't small, as the helper function can attract attention.
 
 ### `seed`
 Type: `string|number` Default: `0`
@@ -900,13 +956,13 @@ Result:
 Type: `string` Default: `separate`
 
 Specifies source map generation mode:
-* `inline` - emit a single file with source maps instead of having a separate file;
+* `inline` - add source map at the end of each .js files;
 * `separate` - generates corresponding '.map' file with source map. In case you run obfuscator through CLI - adds link to source map file to the end of file with obfuscated code `//# sourceMappingUrl=file.js.map`.
 
 ### `splitStrings`
 Type: `boolean` Default: `false`
 
-Splits literal strings into chunks with length of [`splitStringsChunkLength`](#splitStringsChunkLength) option value.
+Splits literal strings into chunks with length of [`splitStringsChunkLength`](#splitstringschunklength) option value.
 
 Example:
 ```ts
@@ -924,13 +980,13 @@ Example:
 ### `splitStringsChunkLength`
 Type: `number` Default: `10`
 
-Sets chunk length of [`splitStrings`](#splitStrings) option.
+Sets chunk length of [`splitStrings`](#splitstrings) option.
 
 ### `stringArray`
 Type: `boolean` Default: `true`
 
 Removes string literals and place them in a special array. For instance, the string `"Hello World"` in `var m = "Hello World";` will be replaced with something like `var m = _0x12c456[0x1];`
-    
+
 ### `stringArrayEncoding`
 Type: `string[]` Default: `[]`
 
@@ -956,6 +1012,32 @@ stringArrayEncoding: [
     'rc4'
 ]
 ```
+
+### `stringArrayIndexesType`
+Type: `string[]` Default: `['hexadecimal-number']`
+
+##### :warning: `stringArray` option must be enabled
+
+Allows to control the type of string array call indexes.
+
+Each `stringArray` call index will be transformed by the randomly picked type from the passed list. This makes possible to use multiple types.
+
+Available values:
+* `'hexadecimal-number'` (`default`): transforms string array call indexes as hexadecimal numbers
+* `'hexadecimal-numeric-string'`: transforms string array call indexes as hexadecimal numeric string
+
+Before `2.9.0` release `javascript-obfuscator` transformed all string array call indexes with `hexadecimal-numeric-string` type. This makes some manual deobfuscation slightly harder but it allows easy detection of these calls by automatic deobfuscators.
+
+The new `hexadecimal-number` type approaches to make harder auto-detect of string array call patterns in the code.
+
+More types will be added in the future.
+
+### `stringArrayIndexShift`
+Type: `boolean` Default: `true`
+
+##### :warning: `stringArray` option must be enabled
+
+Enables additional index shift for all string array calls
 
 ### `stringArrayWrappersCount`
 Type: `number` Default: `1`
@@ -1012,7 +1094,7 @@ const eagle = _0x26ca42('0x5');
 ### `stringArrayWrappersChainedCalls`
 Type: `boolean` Default: `true`
 
-##### :warning: [`stringArray`](#stringarray) and [`stringArrayWrappersCount`](#stringArrayWrappersCount) options must be enabled
+##### :warning: [`stringArray`](#stringarray) and [`stringArrayWrappersCount`](#stringarraywrapperscount) options must be enabled
 
 Enables the chained calls between `string array` wrappers.
 
@@ -1064,16 +1146,25 @@ function test() {
 }
 ```
 
+### `stringArrayWrappersParametersMaxCount`
+Type: `number` Default: `2`
+
+##### :warning: [`stringArray`](#stringarray) option must be enabled
+##### :warning: Currently this option affects only wrappers added by [`stringArrayWrappersType`](#stringarraywrapperstype) `function` option value
+
+Allows to control the maximum number of string array wrappers parameters.
+Default and minimum value is `2`. Recommended value between `2` and `5`.
+
 ### `stringArrayWrappersType`
 Type: `string` Default: `variable`
 
-##### :warning: [`stringArray`](#stringarray) and [`stringArrayWrappersCount`](#stringArrayWrappersCount) options must be enabled
+##### :warning: [`stringArray`](#stringarray) and [`stringArrayWrappersCount`](#stringarraywrapperscount) options must be enabled
 
 Allows to select a type of the wrappers that are appending by the `stringArrayWrappersCount` option.
 
 Available values:
 * `'variable'`: appends variable wrappers. Fast performance.
-* `'function'`: appends function wrappers. More slow performance than with `variable` but allows to additionally shift the `stringArray` index.
+* `'function'`: appends function wrappers. Slower performance than with `variable` but provides more strict obfuscation
 
 Highly recommended to use `function` wrappers for higher obfuscation when a performance loss doesn't have a high impact on an obfuscated application.
 
@@ -1206,8 +1297,10 @@ Performance will 50-100% slower than without obfuscation
     splitStringsChunkLength: 5,
     stringArray: true,
     stringArrayEncoding: ['rc4'],
+    stringArrayIndexShift: true,
     stringArrayWrappersCount: 5,
-    stringArrayWrappersChainedCalls: true,
+    stringArrayWrappersChainedCalls: true,    
+    stringArrayWrappersParametersMaxCount: 5,
     stringArrayWrappersType: 'function',
     stringArrayThreshold: 1,
     transformObjectKeys: true,
@@ -1241,9 +1334,11 @@ Performance will 30-35% slower than without obfuscation
     splitStringsChunkLength: 10,
     stringArray: true,
     stringArrayEncoding: ['base64'],
+    stringArrayIndexShift: true,
     stringArrayWrappersCount: 2,
     stringArrayWrappersChainedCalls: true,
-    stringArrayWrappersType: 'variable',
+    stringArrayWrappersParametersMaxCount: 4,
+    stringArrayWrappersType: 'function',
     stringArrayThreshold: 0.75,
     transformObjectKeys: true,
     unicodeEscapeSequence: false
@@ -1273,8 +1368,10 @@ Performance will slightly slower than without obfuscation
     splitStrings: false,
     stringArray: true,
     stringArrayEncoding: [],
+    stringArrayIndexShift: true,
     stringArrayWrappersCount: 1,
     stringArrayWrappersChainedCalls: true,
+    stringArrayWrappersParametersMaxCount: 2,
     stringArrayWrappersType: 'variable',
     stringArrayThreshold: 0.75,
     unicodeEscapeSequence: false
@@ -1302,13 +1399,17 @@ Performance will slightly slower than without obfuscation
     splitStrings: false,
     stringArray: true,
     stringArrayEncoding: [],
+    stringArrayIndexShift: true,
     stringArrayWrappersCount: 1,
     stringArrayWrappersChainedCalls: true,
+    stringArrayWrappersParametersMaxCount: 2,
     stringArrayWrappersType: 'variable',
     stringArrayThreshold: 0.75,
     unicodeEscapeSequence: false
 }
 ```
+
+<!-- ##options-end## -->
 
 ## Frequently Asked Questions
 

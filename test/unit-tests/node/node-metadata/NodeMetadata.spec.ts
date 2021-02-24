@@ -39,10 +39,28 @@ describe('NodeMetadata', () => {
             node = NodeFactory.literalNode('foo');
             node.metadata = {};
             node.metadata.replacedLiteral = true;
-            value = NodeMetadata.get<ESTree.LiteralNodeMetadata>(node, 'replacedLiteral');
+            value = NodeMetadata.get<ESTree.LiteralNodeMetadata, 'replacedLiteral'>(node, 'replacedLiteral');
         });
 
         it('should get metadata value of the node', () => {
+            assert.equal(value, expectedValue);
+        });
+    });
+
+    describe('isForceTransformNode', () => {
+        const expectedValue: boolean = true;
+
+        let node: ESTree.Identifier,
+            value: boolean | undefined;
+
+        before(() => {
+            node = NodeFactory.identifierNode('foo');
+            node.metadata = {};
+            node.metadata.forceTransformNode = true;
+            value = NodeMetadata.isForceTransformNode(node);
+        });
+
+        it('should return metadata value', () => {
             assert.equal(value, expectedValue);
         });
     });

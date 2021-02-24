@@ -2,7 +2,7 @@ import { inject, injectable, } from 'inversify';
 import { ServiceIdentifiers } from './container/ServiceIdentifiers';
 
 import * as acorn from 'acorn';
-import * as escodegen from 'escodegen';
+import * as escodegen from '@javascript-obfuscator/escodegen';
 import * as ESTree from 'estree';
 
 import { TObfuscatedCodeFactory } from './types/container/source-code/TObfuscatedCodeFactory';
@@ -68,7 +68,9 @@ export class JavaScriptObfuscator implements IJavaScriptObfuscator {
         NodeTransformer.CommentsTransformer,
         NodeTransformer.CustomCodeHelpersTransformer,
         NodeTransformer.DeadCodeInjectionTransformer,
+        NodeTransformer.EscapeSequenceTransformer,
         NodeTransformer.EvalCallExpressionTransformer,
+        NodeTransformer.ExportSpecifierTransformer,
         NodeTransformer.ExpressionStatementsMergeTransformer,
         NodeTransformer.FunctionControlFlowTransformer,
         NodeTransformer.IfStatementSimplifyTransformer,
@@ -86,9 +88,11 @@ export class JavaScriptObfuscator implements IJavaScriptObfuscator {
         NodeTransformer.ParentificationTransformer,
         NodeTransformer.ScopeIdentifiersTransformer,
         NodeTransformer.SplitStringTransformer,
+        NodeTransformer.StringArrayRotateFunctionTransformer,
         NodeTransformer.StringArrayScopeCallsWrapperTransformer,
         NodeTransformer.StringArrayTransformer,
         NodeTransformer.TemplateLiteralTransformer,
+        NodeTransformer.DirectivePlacementTransformer,
         NodeTransformer.VariableDeclarationsMergeTransformer,
         NodeTransformer.VariablePreserveTransformer
     ];

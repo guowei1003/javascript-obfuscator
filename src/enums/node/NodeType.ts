@@ -14,8 +14,10 @@ export enum NodeType {
     ClassDeclaration = 'ClassDeclaration',
     ConditionalExpression = 'ConditionalExpression',
     ContinueStatement = 'ContinueStatement',
+    DoWhileStatement = 'DoWhileStatement',
     ExportAllDeclaration = 'ExportAllDeclaration',
     ExportNamedDeclaration = 'ExportNamedDeclaration',
+    ExportSpecifier = 'ExportSpecifier',
     ExpressionStatement = 'ExpressionStatement',
     ForStatement = 'ForStatement',
     ForInStatement = 'ForInStatement',
@@ -40,6 +42,7 @@ export enum NodeType {
     RestElement = 'RestElement',
     ReturnStatement = 'ReturnStatement',
     SequenceExpression = 'SequenceExpression',
+    SpreadElement = 'SpreadElement',
     Super = 'Super',
     SwitchCase = 'SwitchCase',
     SwitchStatement = 'SwitchStatement',
@@ -52,6 +55,7 @@ export enum NodeType {
     UpdateExpression = 'UpdateExpression',
     VariableDeclaration = 'VariableDeclaration',
     VariableDeclarator = 'VariableDeclarator',
+    WithStatement = 'WithStatement',
     WhileStatement = 'WhileStatement',
     YieldExpression = 'YieldExpression'
 }
