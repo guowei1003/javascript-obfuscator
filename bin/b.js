@@ -1,14 +1,10 @@
-function f(_0x5d23da) {
-    const _0x4f5889 = {
-            'sgFOn': function (_0x4e558f, _0x1efd47) {
-                return _0x4e558f === _0x1efd47;
+function f(_0x12ee56) {
+    const _0x640fff = {
+            'IYyHu': function (_0x30af75, _0x4c6e68) {
+                return _0x30af75 === _0x4c6e68;
             },
-            'agaYQ': 'object',
-            'flgvS': function (_0x593530, _0x4aec99) {
-                return _0x593530 === _0x4aec99;
-            },
-            'suUCE': 'function'
-        }, _0xbf8a80 = _0x4f5889['sgFOn'](typeof my, _0x4f5889['agaYQ']), _0x4cbf30 = _0x4f5889['flgvS'](typeof require, _0x4f5889['suUCE']);
-    console['log'](_0xbf8a80, _0x4cbf30);
+            'ToZBz': 'object'
+        }, _0x570c0b = _0x640fff['IYyHu'](typeof my, _0x640fff['ToZBz']), _0x34705b = typeof require === 'function';
+    console['log'](_0x570c0b, _0x34705b);
 }
 f('0');

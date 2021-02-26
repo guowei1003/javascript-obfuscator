@@ -59,6 +59,9 @@ export class StringLiteralControlFlowReplacer extends AbstractControlFlowReplace
         if (!NodeLiteralUtils.isStringLiteralNode(literalNode) || literalNode.value.length < 3) {
             return literalNode;
         }
+        if (literalNode.value === 'function' && NodeGuards.isBinaryExpressionNode(parentNode) && NodeLiteralUtils.isBinaryExpressionRequireNode(parentNode)) {
+            return literalNode;
+        }
 
         const replacerId: string = String(literalNode.value);
         const literalFunctionCustomNode: ICustomNode<TInitialData<StringLiteralNode>> =

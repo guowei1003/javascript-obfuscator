@@ -15,6 +15,7 @@ import { ControlFlowCustomNode } from '../../../enums/custom-nodes/ControlFlowCu
 
 import { BinaryExpressionFunctionNode } from '../../../custom-nodes/control-flow-flattening-nodes/BinaryExpressionFunctionNode';
 import { ExpressionWithOperatorControlFlowReplacer } from './ExpressionWithOperatorControlFlowReplacer';
+import {NodeGuards} from '../../../node/NodeGuards';
 
 @injectable()
 export class BinaryExpressionControlFlowReplacer extends ExpressionWithOperatorControlFlowReplacer {
@@ -49,8 +50,15 @@ export class BinaryExpressionControlFlowReplacer extends ExpressionWithOperatorC
         controlFlowStorage: TControlFlowStorage
     ): ESTree.Node {
         const operator: ESTree.BinaryOperator = binaryExpressionNode.operator;
-        console.log('===binaryExpressionNode===', binaryExpressionNode);
-        console.log('===parentNode===', parentNode);
+        if (NodeGuards.isUnaryExpressionNode(binaryExpressionNode.left) && binaryExpressionNode.left.operator === 'typeof') {
+            if (NodeGuards.isIdentifierNode(binaryExpressionNode.left.argument)) {
+                if (binaryExpressionNode.left.argument.name === 'require') {
+                    return binaryExpressionNode;
+                }
+            }
+        }
+
+
         const binaryExpressionFunctionCustomNode: ICustomNode<TInitialData<BinaryExpressionFunctionNode>> =
             this.controlFlowCustomNodeFactory(ControlFlowCustomNode.BinaryExpressionFunctionNode);
 
