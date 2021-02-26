@@ -10,7 +10,7 @@ export function GlobalVariableTemplate1 (): string {
             
             that = getGlobal();
         } catch (e) {
-            that = typeof window !== 'undefined' ? window: typeof wx === 'object'? wx: this;
+            that = typeof window !== 'undefined' ? window: this;
         }
     `;
 }

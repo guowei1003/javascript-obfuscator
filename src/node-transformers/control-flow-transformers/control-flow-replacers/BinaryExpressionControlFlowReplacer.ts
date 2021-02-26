@@ -49,6 +49,8 @@ export class BinaryExpressionControlFlowReplacer extends ExpressionWithOperatorC
         controlFlowStorage: TControlFlowStorage
     ): ESTree.Node {
         const operator: ESTree.BinaryOperator = binaryExpressionNode.operator;
+        console.log('===binaryExpressionNode===', binaryExpressionNode);
+        console.log('===parentNode===', parentNode);
         const binaryExpressionFunctionCustomNode: ICustomNode<TInitialData<BinaryExpressionFunctionNode>> =
             this.controlFlowCustomNodeFactory(ControlFlowCustomNode.BinaryExpressionFunctionNode);
 

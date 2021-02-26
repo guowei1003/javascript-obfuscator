@@ -4,14 +4,16 @@
 export function DebugProtectionFunctionTemplate (): string {
     return `
         function {debugProtectionFunctionName} (ret) {
-        
-            {globalVariableTemplate}
-        
             function debuggerProtection (counter) {
             
                 {debuggerTemplate}
                 
+                var gw_zbf = '\t';
+                
                 debuggerProtection(++counter);
+                
+                gw_zbf += '\t';
+                
             }
             
             try {
